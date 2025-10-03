@@ -4,6 +4,7 @@ This project uses:
 - Gradle - Groovy
 - JDK 17
 (the whole project is required to run on intellij)
+
 Basic Dependencies:
 - implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 - implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -13,3 +14,4 @@ Basic Dependencies:
 - annotationProcessor 'org.projectlombok:lombok'
 - testImplementation 'org.springframework.boot:spring-boot-starter-test'
 - testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
