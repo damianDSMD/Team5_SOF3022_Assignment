@@ -1,4 +1,4 @@
-package entity;
+package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class HinhAnh {
     @JsonIgnore
     private SanPham sanPham;
 
-    @Column(name = "TenHA")
+    @Column(name = "TenHA", length = 255)
     private String tenHA;
 
     @Column(name = "FilePath", length = 500)

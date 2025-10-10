@@ -1,3 +1,6 @@
+create database Nhom5_Java5;
+USE Nhom5_Java5;
+
 -- Create KhachHang table
 CREATE TABLE KhachHang (
     MaKH VARCHAR(50) PRIMARY KEY,
@@ -16,8 +19,8 @@ CREATE TABLE GioHang (
     FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
 );
 
--- Create DaiChi table
-CREATE TABLE DaiChi (
+-- Create DiaChi table
+CREATE TABLE DiaChi (
     MaDC VARCHAR(50) PRIMARY KEY,
     MaKH VARCHAR(50),
     DiaChi VARCHAR(500),
@@ -97,7 +100,7 @@ CREATE TABLE NhanVien (
     TenNV VARCHAR(255) NOT NULL,
     SDT VARCHAR(20),
     Email VARCHAR(255),
-    ChuoVu VARCHAR(100),
+    ChucVu VARCHAR(100),
     Password VARCHAR(255)
 );
 
@@ -118,3 +121,28 @@ FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNV);
 ALTER TABLE HoaDon
 ADD CONSTRAINT FK_HoaDon_GiamGia
 FOREIGN KEY (MaGG) REFERENCES GiamGia(MaGG);
+
+INSERT INTO SanPham (MaSP, TenSP, DonGia, SoLuongTonKho, MaLoai) VALUES
+('SP001', 'Laptop Dell XPS 13', 25000000, 15, 'LAPTOP'),
+('SP002', 'iPhone 15 Pro Max', 32000000, 20, 'PHONE'),
+('SP003', 'Samsung Galaxy S24', 22000000, 25, 'PHONE'),
+('SP004', 'MacBook Air M2', 28000000, 10, 'LAPTOP'),
+('SP005', 'iPad Pro 12.9', 30000000, 12, 'TABLET'),
+('SP006', 'AirPods Pro 2', 6500000, 30, 'AUDIO'),
+('SP007', 'Sony WH-1000XM5', 8500000, 18, 'AUDIO'),
+('SP008', 'Apple Watch Series 9', 11000000, 22, 'WATCH'),
+('SP009', 'Gaming PC RTX 4090', 55000000, 5, 'PC'),
+('SP010', 'LG OLED TV 55"', 35000000, 8, 'TV');
+
+-- Insert sample data for HinhAnh (Images)
+INSERT INTO HinhAnh (MaHA, MaSP, TenHA, FilePath) VALUES
+('HA001', 'SP001', 'Dell XPS 13', 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400'),
+('HA002', 'SP002', 'iPhone 15 Pro Max', 'https://images.unsplash.com/photo-1592286927505-f4d08efffb6e?w=400'),
+('HA003', 'SP003', 'Samsung S24', 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'),
+('HA004', 'SP004', 'MacBook Air', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400'),
+('HA005', 'SP005', 'iPad Pro', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400'),
+('HA006', 'SP006', 'AirPods Pro', 'https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=400'),
+('HA007', 'SP007', 'Sony Headphones', 'https://images.unsplash.com/photo-1545127398-14699f92334b?w=400'),
+('HA008', 'SP008', 'Apple Watch', 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400'),
+('HA009', 'SP009', 'Gaming PC', 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400'),
+('HA010', 'SP010', 'LG OLED TV', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400');

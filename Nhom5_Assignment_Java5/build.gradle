@@ -25,18 +25,27 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // Spring Boot Web & Thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Spring Data JPA (bao gồm Jakarta Persistence API)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // MS SQL Server Driver
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // DevTools (hot reload)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-    implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
-    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-
 }
 
 tasks.named('test') {

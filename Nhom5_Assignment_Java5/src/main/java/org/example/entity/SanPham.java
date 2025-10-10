@@ -1,4 +1,4 @@
-package entity;
+package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class SanPham {
     @Column(name = "MaSP", length = 50)
     private String maSP;
 
-    @Column(name = "TenSP", nullable = false)
+    @Column(name = "TenSP", nullable = false, length = 255)
     private String tenSP;
 
     @Column(name = "DonGia", precision = 15, scale = 2)

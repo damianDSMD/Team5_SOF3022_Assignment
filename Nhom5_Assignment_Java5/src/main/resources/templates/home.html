@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Shop Online</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Navigation -->
+<nav>
+    <a th:href="@{/home}">Home</a>
+    <a th:href="@{/products}">Sản phẩm</a>
+    <a th:href="@{/cart}">Giỏ hàng</a>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>Shop Online</h1>
+    <p>Mua sắm hiện đại với phong cách tối giản trắng đen</p>
+</div>
+
+<!-- Product Grid -->
+<div class="container">
+    <!-- Lặp qua danh sách sản phẩm từ database -->
+    <div class="card" th:each="product : ${products}">
+
+        <!-- Hiển thị hình ảnh -->
+        <img th:if="${product.hinhAnhs != null && !product.hinhAnhs.isEmpty()}"
+             th:src="${product.hinhAnhs[0].filePath}"
+             th:alt="${product.tenSP}">
+
+        <!-- Placeholder nếu không có hình -->
+        <img th:unless="${product.hinhAnhs != null && !product.hinhAnhs.isEmpty()}"
+             src="https://via.placeholder.com/400x300?text=No+Image"
+             alt="No image">
+
+        <!-- Thông tin sản phẩm -->
+        <div class="card-body">
+            <h3 th:text="${product.tenSP}">Tên sản phẩm</h3>
+
+            <!-- Format giá tiền -->
+            <p class="price" th:text="${#numbers.formatDecimal(product.donGia, 0, 'COMMA', 0, 'POINT') + ' đ'}">0 đ</p>
+
+            <!-- Số lượng tồn kho -->
+            <p class="stock" th:text="'Còn lại: ' + ${product.soLuongTonKho} + ' sản phẩm'">Còn lại: 0</p>
+
+            <!-- Nút thêm giỏ hàng -->
+            <button th:attr="data-id=${product.maSP}" onclick="addToCart(this)">
+                Thêm vào giỏ
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function addToCart(button) {
+        const maSP = button.getAttribute('data-id');
+        alert('Đã thêm sản phẩm ' + maSP + ' vào giỏ hàng!');
+        // TODO: Implement logic thêm vào giỏ hàng
+    }
+</script>
+</body>
+</html>
