@@ -1,7 +1,7 @@
-package org.example.service;
+package org.example.nhom5_assignment_java5.service;
 
-import org.example.entity.SanPham;
-import org.example.repository.SanPhamRepository;
+import org.example.nhom5_assignment_java5.entity.SanPham;
+import org.example.nhom5_assignment_java5.repository.SanPhamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

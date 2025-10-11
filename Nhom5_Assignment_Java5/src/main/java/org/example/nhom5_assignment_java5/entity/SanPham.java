@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.nhom5_assignment_java5.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

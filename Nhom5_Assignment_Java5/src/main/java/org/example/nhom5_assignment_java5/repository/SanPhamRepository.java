@@ -1,6 +1,6 @@
-package org.example.repository;
+package org.example.nhom5_assignment_java5.repository;
 
-import org.example.entity.SanPham;
+import org.example.nhom5_assignment_java5.entity.SanPham;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

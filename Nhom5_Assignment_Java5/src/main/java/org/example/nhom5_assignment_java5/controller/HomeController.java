@@ -1,7 +1,7 @@
-package org.example.controller;
+package org.example.nhom5_assignment_java5.controller;
 
-import org.example.entity.SanPham;
-import org.example.service.SanPhamService;
+import org.example.nhom5_assignment_java5.entity.SanPham;
+import org.example.nhom5_assignment_java5.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
