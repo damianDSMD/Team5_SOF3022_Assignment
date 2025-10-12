@@ -1,0 +1,171 @@
+/* Reset & font */
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+    color: #f5f5f5;
+    min-height: 100vh;
+    animation: fadeIn 1s ease;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+nav a {
+    text-decoration: none;
+    color: #f5f5f5;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+}
+nav a:hover {
+    background: #f5f5f5;
+    color: #111;
+    transform: scale(1.15) rotate(-2deg);
+    box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg,#fff,#888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 3s infinite alternate;
+}
+.hero p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Product grid */
+.container {
+    padding: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap: 35px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    transition: all 0.4s ease;
+    cursor: pointer;
+    transform: translateY(0);
+}
+.card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(255,255,255,0.2);
+}
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    filter: grayscale(70%);
+    transition: 0.4s;
+}
+.card:hover img {
+    filter: grayscale(0) brightness(1.1);
+}
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+.card-body h3 {
+    margin-bottom: 10px;
+}
+.price {
+    color: #fff;
+    font-weight: bold;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+button {
+    padding: 12px 25px;
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.4s;
+}
+button:hover {
+    background: #fff;
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* Cart */
+.cart-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    backdrop-filter: blur(15px);
+}
+.cart-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+}
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+}
+tr:hover {
+    background: rgba(255,255,255,0.08);
+}
+.checkout {
+    margin-top: 20px;
+    text-align: right;
+}
+.checkout button {
+    border: 2px solid #fff;
+    background: transparent;
+}
+.checkout button:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(20px);}
+    to {opacity:1; transform:translateY(0);}
+}
+@keyframes glow {
+    from {text-shadow: 0 0 5px #fff;}
+    to {text-shadow: 0 0 20px #fff, 0 0 40px #999;}
+}
