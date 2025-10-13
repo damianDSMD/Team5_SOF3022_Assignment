@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "SanPham")
+@Table(name = "SanPham")  // Chỉ định chính xác tên bảng
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

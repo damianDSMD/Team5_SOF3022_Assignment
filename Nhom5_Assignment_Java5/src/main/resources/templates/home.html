@@ -3,62 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ - Shop Online</title>
+    <title>Sản phẩm</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<!-- Navigation -->
 <nav>
-    <a th:href="@{/home}">Home</a>
-    <a th:href="@{/products}">Sản phẩm</a>
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/}">Sản phẩm</a>
     <a th:href="@{/cart}">Giỏ hàng</a>
 </nav>
 
-<!-- Hero Section -->
-<div class="hero">
-    <h1>Shop Online</h1>
-    <p>Mua sắm hiện đại với phong cách tối giản trắng đen</p>
-</div>
-
-<!-- Product Grid -->
 <div class="container">
-    <!-- Lặp qua danh sách sản phẩm từ database -->
-    <div class="card" th:each="product : ${products}">
+    <!-- Kiểm tra nếu có sản phẩm -->
+    <th:block th:if="${products != null and !products.isEmpty()}">
+        <!-- Lặp qua danh sách sản phẩm từ database -->
+        <div class="card" th:each="product : ${products}">
+            <!-- Hiển thị hình ảnh -->
+            <th:block th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}">
+                <img th:src="${product.hinhAnhs[0].filePath}"
+                     th:alt="${product.tenSP}"
+                     onerror="this.src='https://picsum.photos/400/200?grayscale&random=1'">
+            </th:block>
 
-        <!-- Hiển thị hình ảnh -->
-        <img th:if="${product.hinhAnhs != null && !product.hinhAnhs.isEmpty()}"
-             th:src="${product.hinhAnhs[0].filePath}"
-             th:alt="${product.tenSP}">
+            <!-- Placeholder nếu không có hình -->
+            <th:block th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}">
+                <img src="https://picsum.photos/400/200?grayscale&random=1"
+                     th:alt="${product.tenSP}">
+            </th:block>
 
-        <!-- Placeholder nếu không có hình -->
-        <img th:unless="${product.hinhAnhs != null && !product.hinhAnhs.isEmpty()}"
-             src="https://via.placeholder.com/400x300?text=No+Image"
-             alt="No image">
+            <div class="card-body">
+                <h3 th:text="${product.tenSP}">Sản phẩm A</h3>
+                <p class="price">
+                    <span th:text="${#numbers.formatDecimal(product.donGia, 0, 'COMMA', 0, 'POINT')}">100.000</span>đ
+                </p>
 
-        <!-- Thông tin sản phẩm -->
-        <div class="card-body">
-            <h3 th:text="${product.tenSP}">Tên sản phẩm</h3>
+                <!-- Nút Xem chi tiết -->
+                <a th:href="@{/product/{id}(id=${product.maSP})}" class="btn-detail">
+                    Xem chi tiết
+                </a>
 
-            <!-- Format giá tiền -->
-            <p class="price" th:text="${#numbers.formatDecimal(product.donGia, 0, 'COMMA', 0, 'POINT') + ' đ'}">0 đ</p>
-
-            <!-- Số lượng tồn kho -->
-            <p class="stock" th:text="'Còn lại: ' + ${product.soLuongTonKho} + ' sản phẩm'">Còn lại: 0</p>
-
-            <!-- Nút thêm giỏ hàng -->
-            <button th:attr="data-id=${product.maSP}" onclick="addToCart(this)">
-                Thêm vào giỏ
-            </button>
+                <!-- Nút Thêm vào giỏ - SỬA LỖI ĐÂY -->
+                <button class="btn-add-cart"
+                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}"
+                        onclick="addToCart(this)">
+                    Thêm vào giỏ
+                </button>
+            </div>
         </div>
-    </div>
+    </th:block>
+
+    <!-- Thông báo nếu không có sản phẩm -->
+    <th:block th:if="${products == null or products.isEmpty()}">
+        <div class="no-products">
+            <h2>Không có sản phẩm nào</h2>
+            <p>Vui lòng thêm sản phẩm vào database</p>
+        </div>
+    </th:block>
 </div>
 
-<!-- JavaScript -->
 <script>
     function addToCart(button) {
         const maSP = button.getAttribute('data-id');
-        alert('Đã thêm sản phẩm ' + maSP + ' vào giỏ hàng!');
-        // TODO: Implement logic thêm vào giỏ hàng
+        const tenSP = button.getAttribute('data-name');
+        console.log('Thêm sản phẩm:', maSP, tenSP);
+        alert('Đã thêm "' + tenSP + '" vào giỏ hàng!');
     }
 </script>
 </body>
