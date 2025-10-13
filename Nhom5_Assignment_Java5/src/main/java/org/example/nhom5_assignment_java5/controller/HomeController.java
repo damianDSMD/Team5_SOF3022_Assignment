@@ -18,11 +18,17 @@ public class HomeController {
 
     @GetMapping({"/", "/home"})
     public String home(Model model, HttpSession session) {
-        // Lấy danh sách sản phẩm
         List<SanPham> danhSachSanPham = sanPhamService.getAllSanPham();
+
+        // 🔥 Limit how many products to show (e.g., 8)
+        int maxProducts = 8;
+        if (danhSachSanPham.size() > maxProducts) {
+            danhSachSanPham = danhSachSanPham.subList(0, maxProducts);
+        }
+
         model.addAttribute("products", danhSachSanPham);
 
-        // Lấy thông tin khách hàng nếu đã đăng nhập
+        // Giữ thông tin người dùng nếu đã đăng nhập
         KhachHang khachHang = (KhachHang) session.getAttribute("khachHang");
         if (khachHang != null) {
             model.addAttribute("loggedIn", true);

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<main class="product-page">
+    <!-- 🔍 Filter + Sort form -->
+    <form th:action="@{/product-list}" method="get" class="filter-form">
+        <label for="type">Loại sản phẩm:</label>
+        <select name="type" id="type">
+            <option value="">Tất cả</option>
+            <option value="LAPTOP" th:selected="${param.type == 'LAPTOP'}">Laptop</option>
+            <option value="PHONE" th:selected="${param.type == 'PHONE'}">Điện thoại</option>
+            <option value="TABLET" th:selected="${param.type == 'TABLET'}">Máy tính bảng</option>
+            <option value="AUDIO" th:selected="${param.type == 'AUDIO'}">Âm thanh</option>
+            <option value="WATCH" th:selected="${param.type == 'WATCH'}">Đồng hồ</option>
+            <option value="PC" th:selected="${param.type == 'PC'}">Máy tính</option>
+            <option value="TV" th:selected="${param.type == 'TV'}">Tivi</option>
+        </select>
+
+        <label for="sort">Sắp xếp:</label>
+        <select name="sort" id="sort">
+            <option value="">Mặc định</option>
+            <option value="asc" th:selected="${param.sort == 'asc'}">Giá tăng dần</option>
+            <option value="desc" th:selected="${param.sort == 'desc'}">Giá giảm dần</option>
+        </select>
+
+        <label>
+            <input type="checkbox" name="hideOutOfStock" th:checked="${param.hideOutOfStock != null}">
+            Ẩn hết hàng
+        </label>
+
+        <button type="submit">Lọc</button>
+    </form>
+
+    <!-- 🛍️ Product list -->
+    <div class="product-grid">
+        <div class="card" th:each="product : ${products}">
+            <a th:href="@{'/product/' + ${product.maSP}}" style="text-decoration: none; color: inherit;">
+                <img th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                     th:src="${product.hinhAnhs[0].filePath}"
+                     th:alt="${product.tenSP}"
+                     onerror="this.src='https://picsum.photos/400/200?grayscale&random=1'">
+                <img th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                     src="https://picsum.photos/400/200?grayscale&random=1"
+                     th:alt="${product.tenSP}">
+                <div class="card-body">
+                    <h3 th:text="${product.tenSP}">Tên sản phẩm</h3>
+                    <p class="price">
+                        <span th:text="${#numbers.formatDecimal(product.donGia, 0, 'COMMA', 0, 'POINT')}">0</span> đ
+                    </p>
+                    <p class="stock" th:text="'Kho: ' + ${product.soLuongTonKho}"></p>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

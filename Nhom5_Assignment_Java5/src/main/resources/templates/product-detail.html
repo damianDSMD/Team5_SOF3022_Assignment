@@ -6,6 +6,7 @@
     <title th:text="${product != null ? product.tenSP : 'Chi tiết sản phẩm'}">Chi tiết sản phẩm</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
+        /* ⛔️ Your original CSS remains untouched ⛔️ */
         .product-detail {
             max-width: 1200px;
             margin: 50px auto;
@@ -21,145 +22,63 @@
             gap: 40px;
             align-items: start;
         }
-        .product-images {
-            position: sticky;
-            top: 20px;
-        }
+        .product-images { position: sticky; top: 20px; }
         .product-main-image {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            filter: grayscale(70%);
-            transition: 0.4s;
+            width: 100%; height: 500px; object-fit: cover;
+            border-radius: 15px; margin-bottom: 20px;
+            filter: grayscale(70%); transition: 0.4s;
         }
-        .product-main-image:hover {
-            filter: grayscale(0) brightness(1.1);
-        }
-        .product-thumbnails {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-        }
+        .product-main-image:hover { filter: grayscale(0) brightness(1.1); }
+        .product-thumbnails { display: flex; gap: 10px; overflow-x: auto; }
         .product-thumbnails img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            filter: grayscale(70%);
-            transition: 0.3s;
-            border: 2px solid transparent;
+            width: 100px; height: 100px; object-fit: cover;
+            border-radius: 10px; cursor: pointer;
+            filter: grayscale(70%); transition: 0.3s; border: 2px solid transparent;
         }
         .product-thumbnails img:hover,
-        .product-thumbnails img.active {
-            filter: grayscale(0);
-            border-color: #fff;
-        }
+        .product-thumbnails img.active { filter: grayscale(0); border-color: #fff; }
         .product-info h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem; margin-bottom: 20px;
             background: linear-gradient(90deg,#fff,#888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .product-price {
-            font-size: 2rem;
-            color: #fff;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-        .product-stock {
-            font-size: 1.1rem;
-            color: #aaa;
-            margin: 15px 0;
-        }
+        .product-price { font-size: 2rem; color: #fff; font-weight: bold; margin: 20px 0; }
+        .product-stock { font-size: 1.1rem; color: #aaa; margin: 15px 0; }
         .product-category {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: #ddd;
-            margin: 15px 0;
+            display: inline-block; background: rgba(255,255,255,0.1);
+            padding: 8px 20px; border-radius: 20px; font-size: 0.9rem;
+            color: #ddd; margin: 15px 0;
         }
-        .product-description {
-            margin: 30px 0;
-            line-height: 1.8;
-            color: #ccc;
-        }
-        .product-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
+        .product-description { margin: 30px 0; line-height: 1.8; color: #ccc; }
+        .product-actions { display: flex; gap: 15px; margin-top: 30px; }
         .btn-back {
-            padding: 15px 30px;
-            background: transparent;
-            color: #fff;
-            border: 2px solid #fff;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.4s;
-            display: inline-block;
+            padding: 15px 30px; background: transparent; color: #fff;
+            border: 2px solid #fff; border-radius: 25px; text-decoration: none;
+            font-weight: bold; transition: 0.4s; display: inline-block;
         }
-        .btn-back:hover {
-            background: rgba(255,255,255,0.1);
-            transform: scale(1.05);
-        }
+        .btn-back:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
         .btn-add-cart {
-            padding: 15px 40px;
-            background: #fff;
-            color: #000;
-            border: 2px solid #fff;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.4s;
-            font-size: 1rem;
+            padding: 15px 40px; background: #fff; color: #000; border: 2px solid #fff;
+            border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.4s; font-size: 1rem;
         }
-        .btn-add-cart:hover {
-            background: transparent;
-            color: #fff;
-            transform: scale(1.05);
-        }
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
+        .btn-add-cart:hover { background: transparent; color: #fff; transform: scale(1.05); }
+        .quantity-selector { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
         .quantity-selector input {
-            width: 80px;
-            padding: 10px;
-            text-align: center;
-            border: 2px solid #fff;
-            background: transparent;
-            color: #fff;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            width: 80px; padding: 10px; text-align: center; border: 2px solid #fff;
+            background: transparent; color: #fff; border-radius: 10px; font-size: 1.1rem;
         }
         @media (max-width: 768px) {
-            .product-detail-grid {
-                grid-template-columns: 1fr;
-            }
+            .product-detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-<nav>
-    <a th:href="@{/}">Home</a>
-    <a th:href="@{/}">Sản phẩm</a>
-    <a th:href="@{/cart}">Giỏ hàng</a>
-</nav>
+<div th:replace="fragments/header :: header"></div>
 
 <div class="product-detail" th:if="${product != null}">
     <div class="product-detail-grid">
         <!-- Hình ảnh sản phẩm -->
         <div class="product-images">
-            <!-- Hình chính -->
             <img th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
                  th:src="${product.hinhAnhs[0].filePath}"
                  th:alt="${product.tenSP}"
@@ -172,13 +91,12 @@
                  th:alt="${product.tenSP}"
                  class="product-main-image">
 
-            <!-- Thumbnails (nếu có nhiều hình) -->
             <div class="product-thumbnails" th:if="${product.hinhAnhs != null and product.hinhAnhs.size() > 1}">
                 <img th:each="img, iterStat : ${product.hinhAnhs}"
                      th:src="${img.filePath}"
                      th:alt="${img.tenHA}"
                      th:class="${iterStat.index == 0 ? 'active' : ''}"
-                     th:onclick="'changeImage(this.src)'">
+                     onclick="changeImage(this.src)">
             </div>
         </div>
 
@@ -205,25 +123,25 @@
                     Bảo hành chính hãng 12 tháng.</p>
             </div>
 
-            <!-- Chọn số lượng -->
             <div class="quantity-selector">
                 <label style="color: #fff; font-weight: bold;">Số lượng:</label>
                 <input type="number" id="quantity" value="1" min="1" th:max="${product.soLuongTonKho}">
             </div>
 
-            <!-- Nút hành động -->
+            <!-- ✅ FIXED SECTION BELOW -->
             <div class="product-actions">
                 <a th:href="@{/}" class="btn-back">← Quay lại</a>
                 <button class="btn-add-cart"
-                        th:onclick="'addToCart(\'' + ${product.maSP} + '\', \'' + ${product.tenSP} + '\')'">
+                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}"
+                        onclick="addToCart(this)">
                     Thêm vào giỏ hàng
                 </button>
             </div>
+            <!-- ✅ END FIX -->
         </div>
     </div>
 </div>
 
-<!-- Thông báo không tìm thấy sản phẩm -->
 <div class="product-detail" th:unless="${product != null}">
     <h1 style="text-align: center; color: #fff;">Không tìm thấy sản phẩm</h1>
     <div style="text-align: center; margin-top: 30px;">
@@ -232,28 +150,55 @@
 </div>
 
 <script>
-    // Đổi hình ảnh chính
     function changeImage(src) {
         document.getElementById('mainImage').src = src;
-
-        // Đánh dấu thumbnail active
         const thumbnails = document.querySelectorAll('.product-thumbnails img');
         thumbnails.forEach(img => {
             img.classList.remove('active');
-            if (img.src === src) {
-                img.classList.add('active');
-            }
+            if (img.src === src) img.classList.add('active');
         });
     }
 
-    // Thêm vào giỏ hàng
-    function addToCart(maSP, tenSP) {
+    // ✅ Updated JS - use data attributes safely
+    function addToCart(button) {
+        const maSP = button.getAttribute('data-id');
+        const tenSP = button.getAttribute('data-name');
         const quantity = document.getElementById('quantity').value;
         console.log('Thêm', quantity, 'sản phẩm:', maSP, tenSP);
         alert('Đã thêm ' + quantity + ' "' + tenSP + '" vào giỏ hàng!');
-
-        // TODO: Gọi API để thêm vào giỏ hàng
     }
+    const maxVisible = 8; // 👈 number of products visible at first
+    document.addEventListener("DOMContentLoaded", function () {
+        const products = document.querySelectorAll(".card");
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.textContent = "Xem thêm sản phẩm";
+        loadMoreBtn.className = "btn-load-more";
+        loadMoreBtn.style.display = "block";
+        loadMoreBtn.style.margin = "20px auto";
+        loadMoreBtn.style.padding = "10px 20px";
+        loadMoreBtn.style.borderRadius = "10px";
+        loadMoreBtn.style.background = "#fff";
+        loadMoreBtn.style.color = "#000";
+        loadMoreBtn.style.cursor = "pointer";
+        loadMoreBtn.style.fontWeight = "bold";
+        loadMoreBtn.style.border = "2px solid #fff";
+
+        // Hide products beyond maxVisible
+        products.forEach((card, index) => {
+            if (index >= maxVisible) card.style.display = "none";
+        });
+
+        // Show button only if needed
+        if (products.length > maxVisible) {
+            document.querySelector(".container").appendChild(loadMoreBtn);
+        }
+
+        // Click event to reveal more
+        loadMoreBtn.addEventListener("click", () => {
+            products.forEach(card => (card.style.display = "block"));
+            loadMoreBtn.remove();
+        });
+    });
 </script>
 </body>
 </html>

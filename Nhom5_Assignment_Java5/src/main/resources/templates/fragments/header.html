@@ -1,0 +1,20 @@
+<!-- templates/fragments/header.html -->
+<nav th:fragment="header">
+    <a th:href="@{/home}">Home</a>
+    <a th:href="@{/product-list}">Sản phẩm</a>
+    <a th:href="@{/cart}">Giỏ hàng</a>
+    <a th:href="@{/contact}">Liên hệ</a>
+
+    <!-- ✅ User login status -->
+    <th:block th:if="${session.khachHang == null}">
+        <a th:href="@{/login}">Đăng nhập</a>
+        <a th:href="@{/register}">Đăng ký</a>
+    </th:block>
+
+    <th:block th:if="${session.khachHang != null}">
+        <span style="color:white; margin-left:20px;">
+            Xin chào, <strong th:text="${session.khachHang.tenKH}">User</strong>!
+        </span>
+        <a th:href="@{/logout}" style="margin-left:10px; color:#fff;">Đăng xuất</a>
+    </th:block>
+</nav>

@@ -3,101 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sản phẩm</title>
+    <title>Trang chủ - Nhóm 5</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 10px 20px;
-        }
-        nav a {
-            color: white;
-            margin-right: 15px;
-            text-decoration: none;
-        }
-        nav .user-info {
-            color: white;
-        }
-        nav .logout-btn {
-            color: #ffcc00;
-            text-decoration: underline;
-            margin-left: 10px;
-            cursor: pointer;
-        }
+        /* giữ nguyên toàn bộ CSS như file bạn gửi */
+        .hero h1 {font-size:3.5rem;margin-bottom:20px;text-transform:uppercase;letter-spacing:3px;background:linear-gradient(90deg,#fff,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:glow 3s infinite alternate;}
+        .hero p {font-size:1.2rem;opacity:0.8;margin-bottom:25px;}
+        .hero .btn {padding:12px 30px;border:2px solid #fff;border-radius:30px;text-decoration:none;color:#fff;font-weight:bold;transition:0.4s;}
+        .hero .btn:hover {background:#fff;color:#000;transform:scale(1.1);}
+        section {padding:80px 50px;text-align:center;animation:fadeIn 1s ease;}
+        section h2 {font-size:2.2rem;text-transform:uppercase;margin-bottom:40px;background:linear-gradient(90deg,#fff,#888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .featured,.features {display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:35px;}
+        .feature,.member {background:rgba(255,255,255,0.05);border-radius:20px;padding:25px;backdrop-filter:blur(10px);box-shadow:0 8px 25px rgba(0,0,0,0.4);transition:0.4s;}
+        .feature:hover,.member:hover {transform:translateY(-10px);box-shadow:0 15px 40px rgba(255,255,255,0.2);}
+        .feature h3 {margin:15px 0;font-size:1.3rem;}
+        .feature p {font-size:0.95rem;opacity:0.8;}
+        .team {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
+        .member img {width:100%;border-radius:15px;height:220px;object-fit:cover;}
+        .member h4 {margin-top:15px;font-size:1.2rem;}
+        .member span {font-size:0.9rem;opacity:0.8;}
+        footer {margin-top:100px;padding:25px 0;text-align:center;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);color:#ccc;font-size:0.9rem;border-top:1px solid rgba(255,255,255,0.1);}
     </style>
 </head>
 <body>
-<nav>
-    <div>
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/}">Sản phẩm</a>
-        <a th:href="@{/cart}">Giỏ hàng</a>
-    </div>
 
-    <div class="user-info">
-        <!-- Nếu đã đăng nhập -->
-        <th:block th:if="${loggedIn}">
-            Xin chào, <span th:text="${username}">User</span>!
-            <a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
-        </th:block>
+<!-- ======== NAVBAR ======== -->
+<div th:replace="fragments/header :: header"></div>
 
-        <!-- Nếu chưa đăng nhập -->
-        <th:block th:unless="${loggedIn}">
-            <a th:href="@{/login}">Đăng nhập</a>
-            |
-            <a th:href="@{/register}">Đăng ký</a>
-        </th:block>
-    </div>
-</nav>
-
-<div class="container">
-    <!-- phần sản phẩm giữ nguyên -->
-    <th:block th:if="${products != null and !products.isEmpty()}">
-        <div class="card" th:each="product : ${products}">
-            <th:block th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}">
-                <img th:src="${product.hinhAnhs[0].filePath}"
-                     th:alt="${product.tenSP}"
-                     onerror="this.src='https://picsum.photos/400/200?grayscale&random=1'">
-            </th:block>
-
-            <th:block th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}">
-                <img src="https://picsum.photos/400/200?grayscale&random=1"
-                     th:alt="${product.tenSP}">
-            </th:block>
-
-            <div class="card-body">
-                <h3 th:text="${product.tenSP}">Sản phẩm A</h3>
-                <p class="price">
-                    <span th:text="${#numbers.formatDecimal(product.donGia, 0, 'COMMA', 0, 'POINT')}">100.000</span>đ
-                </p>
-                <a th:href="@{/product/{id}(id=${product.maSP})}" class="btn-detail">Xem chi tiết</a>
-                <button class="btn-add-cart"
-                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}"
-                        onclick="addToCart(this)">
-                    Thêm vào giỏ
-                </button>
-            </div>
-        </div>
-    </th:block>
-
-    <th:block th:if="${products == null or products.isEmpty()}">
-        <div class="no-products">
-            <h2>Không có sản phẩm nào</h2>
-            <p>Vui lòng thêm sản phẩm vào database</p>
-        </div>
-    </th:block>
+<!-- ======== HERO SECTION ======== -->
+<div class="hero">
+    <h1>Nhóm 5 - Shop Online</h1>
+    <p>Mua sắm hiện đại với phong cách tối giản và công nghệ web tiên tiến</p>
+    <a th:href="@{/}" class="btn">Khám phá ngay</a>
 </div>
 
+<!-- ======== SẢN PHẨM NỔI BẬT ======== -->
+<section>
+    <h2>Sản phẩm nổi bật</h2>
+
+    <div class="featured featured-hot" th:if="${products != null and !products.isEmpty()}">
+        <div class="card" th:each="product : ${products}">
+            <img th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                 th:src="${product.hinhAnhs[0].filePath}"
+                 th:alt="${product.tenSP}"
+                 onerror="this.src='https://picsum.photos/400/200?grayscale&random=1'">
+            <img th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                 src="https://picsum.photos/400/200?grayscale&random=1"
+                 th:alt="${product.tenSP}">
+            <div class="card-body">
+                <h3 th:text="${product.tenSP}">Tên sản phẩm</h3>
+                <p class="price">
+                    <span th:text="${#numbers.formatDecimal(product.donGia,0,'COMMA',0,'POINT')}">0</span>đ
+                </p>
+                <a th:href="@{/product/{id}(id=${product.maSP})}">
+                    <button>Mua ngay</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======== LÝ DO CHỌN CHÚNG TÔI ======== -->
+<section>
+    <h2>Tại sao chọn chúng tôi</h2>
+    <div class="features">
+        <div class="feature">
+            <h3>Giao hàng nhanh</h3>
+            <p>Đảm bảo giao hàng trong 24h tại nội thành và 2-3 ngày cho các tỉnh.</p>
+        </div>
+        <div class="feature">
+            <h3>Sản phẩm chất lượng</h3>
+            <p>Tất cả hàng hoá đều được kiểm định kỹ càng trước khi đến tay khách hàng.</p>
+        </div>
+        <div class="feature">
+            <h3>Hỗ trợ 24/7</h3>
+            <p>Đội ngũ CSKH luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi nơi.</p>
+        </div>
+    </div>
+</section>
+<!-- ======== SẢN PHẨM CỦA CHÚNG TÔI ======== -->
+<section>
+    <h2>Sản phẩm của chúng tôi</h2>
+
+    <div class="featured featured-all" th:if="${products != null and !products.isEmpty()}">
+        <div class="card" th:each="product : ${products}">
+            <img th:if="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                 th:src="${product.hinhAnhs[0].filePath}"
+                 th:alt="${product.tenSP}"
+                 onerror="this.src='https://picsum.photos/400/200?grayscale&random=1'">
+            <img th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
+                 src="https://picsum.photos/400/200?grayscale&random=1"
+                 th:alt="${product.tenSP}">
+            <div class="card-body">
+                <h3 th:text="${product.tenSP}">Tên sản phẩm</h3>
+                <p class="price">
+                    <span th:text="${#numbers.formatDecimal(product.donGia,0,'COMMA',0,'POINT')}">0</span>đ
+                </p>
+                <a th:href="@{/product/{id}(id=${product.maSP})}">
+                    <button>Mua ngay</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======== GIỚI THIỆU NHÓM ======== -->
+<section>
+    <h2>Giới thiệu nhóm 5</h2>
+    <div class="team">
+        <div class="member"><h4>Mạc Quốc Bảo</h4><span>Contact</span></div>
+        <div class="member"><h4>Trần Nam Anh</h4><span>Đăng Nhập</span></div>
+        <div class="member"><h4>Nguyễn Minh Nhật</h4><span>Giỏ hàng</span></div>
+        <div class="member"><h4>Vũ Trịnh Hoàng Anh</h4><span>Sản phẩm</span></div>
+        <div class="member"><h4>Tạ Kim Nguyên</h4><span>Trang Chủ</span></div>
+    </div>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- ✅ LIMIT TO 5 PRODUCTS -->
 <script>
-    function addToCart(button) {
-        const maSP = button.getAttribute('data-id');
-        const tenSP = button.getAttribute('data-name');
-        console.log('Thêm sản phẩm:', maSP, tenSP);
-        alert('Đã thêm "' + tenSP + '" vào giỏ hàng!');
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+        // 👇 Section 1: "Sản phẩm nổi bật" (show 5)
+        const maxHot = 5;
+        const hotProducts = document.querySelectorAll(".featured-hot .card");
+        hotProducts.forEach((card, index) => {
+            if (index >= maxHot) card.style.display = "none";
+        });
+
+        // 👇 Section 2: "Sản phẩm của chúng tôi" (show 10)
+        const maxAll = 10;
+        const allProducts = document.querySelectorAll(".featured-all .card");
+        allProducts.forEach((card, index) => {
+            if (index >= maxAll) card.style.display = "none";
+        });
+    });
 </script>
+
 </body>
 </html>

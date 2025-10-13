@@ -28,5 +28,5 @@ public class KhachHang {
     private String password;
 
     @Column(name = "HangTV")
-    private String hangTV = "Thường"; // mặc định
+    private String hangTV = "Bronze"; // mặc định
 }

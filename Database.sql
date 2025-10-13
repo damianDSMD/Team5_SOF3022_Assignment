@@ -1,10 +1,12 @@
-create database Nhom5_Java5;
+﻿create database Nhom5_Java5;
 USE Nhom5_Java5;
-
+COLLATE Vietnamese_100_CI_AI_SC_UTF8;
+GO
+drop database Nhom5_Java5
 -- Create KhachHang table
 CREATE TABLE KhachHang (
-    MaKH VARCHAR(50) PRIMARY KEY,
-    TenKH VARCHAR(255) NOT NULL,
+    MaKH INT IDENTITY(1,1) PRIMARY KEY,
+    TenKH NVARCHAR(255) NOT NULL,
     SDT VARCHAR(20),
     Email VARCHAR(255),
     Password VARCHAR(255),
@@ -14,7 +16,7 @@ CREATE TABLE KhachHang (
 -- Create GioHang table
 CREATE TABLE GioHang (
     MaGH VARCHAR(50) PRIMARY KEY,
-    MaKH VARCHAR(50),
+    MaKH INT IDENTITY(1,1),
     SoLuong INT,
     FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
 );
@@ -22,7 +24,7 @@ CREATE TABLE GioHang (
 -- Create DiaChi table
 CREATE TABLE DiaChi (
     MaDC VARCHAR(50) PRIMARY KEY,
-    MaKH VARCHAR(50),
+    MaKH INT IDENTITY(1,1),
     DiaChi VARCHAR(500),
     MacDinh VARCHAR(10),
     FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
@@ -31,7 +33,7 @@ CREATE TABLE DiaChi (
 -- Create HoaDon table
 CREATE TABLE HoaDon (
     MaHD VARCHAR(50) PRIMARY KEY,
-    MaKH VARCHAR(50),
+    MaKH INT IDENTITY(1,1),
     MaNV VARCHAR(50),
     MaDC VARCHAR(50),
     NgayTaoHD DATE,
@@ -45,7 +47,7 @@ CREATE TABLE HoaDon (
 -- Create SanPham table
 CREATE TABLE SanPham (
     MaSP VARCHAR(50) PRIMARY KEY,
-    TenSP VARCHAR(255) NOT NULL,
+    TenSP NVARCHAR(255) NOT NULL,
     DonGia DECIMAL(15, 2),
     SoLuongTonKho INT,
     MaLoai VARCHAR(50)
@@ -55,7 +57,7 @@ CREATE TABLE SanPham (
 CREATE TABLE HinhAnh (
     MaHA VARCHAR(50) PRIMARY KEY,
     MaSP VARCHAR(50),
-    TenHA VARCHAR(255),
+    TenHA NVARCHAR(255),
     FilePath VARCHAR(500),  -- Path to image file
     FOREIGN KEY (MaSP) REFERENCES SanPham(MaSP)
 );
@@ -97,7 +99,7 @@ CREATE TABLE HoaDonChiTiet (
 -- Create NhanVien table
 CREATE TABLE NhanVien (
     MaNV VARCHAR(50) PRIMARY KEY,
-    TenNV VARCHAR(255) NOT NULL,
+    TenNV NVARCHAR(255) NOT NULL,
     SDT VARCHAR(20),
     Email VARCHAR(255),
     ChucVu VARCHAR(100),
@@ -146,3 +148,10 @@ INSERT INTO HinhAnh (MaHA, MaSP, TenHA, FilePath) VALUES
 ('HA008', 'SP008', 'Apple Watch', 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400'),
 ('HA009', 'SP009', 'Gaming PC', 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400'),
 ('HA010', 'SP010', 'LG OLED TV', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400');
+
+INSERT INTO KhachHang (TenKH, SDT, Email, Password, HangTV) VALUES
+('Nguyễn Văn A', '0901234567', 'a@example.com', '123456', 'Bronze')
+
+select * from KhachHang
+ALTER DATABASE Nhom5_Java5
+COLLATE Vietnamese_100_CI_AI_SC_UTF8;

@@ -38,7 +38,14 @@ nav a:hover {
     transform: scale(1.15) rotate(-2deg);
     box-shadow: 0 5px 15px rgba(255,255,255,0.3);
 }
-
+nav span {
+    text-decoration: none;
+    color: #f5f5f5;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+}
 /* Hero section */
 .hero {
     text-align: center;
@@ -219,4 +226,49 @@ tr:hover {
 @keyframes glow {
     from {text-shadow: 0 0 5px #fff;}
     to {text-shadow: 0 0 20px #fff, 0 0 40px #999;}
+}
+
+
+/* === PRODUCT PAGE SPECIFIC === */
+.product-page {
+    padding: 40px 5%;
+}
+
+/* Filter form */
+.filter-form {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.filter-form select,
+.filter-form input[type="checkbox"] {
+    margin: 0 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.filter-form label {
+    margin: 0 5px;
+    color: #eee;
+}
+.filter-form button {
+    margin-left: 10px;
+}
+
+/* Product grid layout */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 35px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+/* ✅ Limit each product grid to max 5 columns per row */
+.featured {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 35px;
+    max-width: calc(260px * 5 + 35px * 4); /* ensures max 5 columns with gap */
+    margin: 0 auto; /* centers the grid */
 }
