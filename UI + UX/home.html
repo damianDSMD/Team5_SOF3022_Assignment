@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang chủ - Nhóm 5</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Hero */
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg,#fff,#999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 3s infinite alternate;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin-bottom: 25px;
+    }
+    .hero .btn {
+      padding: 12px 30px;
+      border: 2px solid #fff;
+      border-radius: 30px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: 0.4s;
+    }
+    .hero .btn:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    /* Section chung */
+    section {
+      padding: 80px 50px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    section h2 {
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      background: linear-gradient(90deg,#fff,#888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Sản phẩm nổi bật */
+    .featured {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 35px;
+    }
+
+    /* Lý do chọn chúng tôi */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 35px;
+    }
+    .feature {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      transition: 0.4s;
+    }
+    .feature:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(255,255,255,0.2);
+    }
+    .feature h3 {
+      margin: 15px 0;
+      font-size: 1.3rem;
+    }
+    .feature p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    /* Giới thiệu nhóm */
+    .team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 25px;
+    }
+    .member {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      transition: 0.4s;
+    }
+    .member:hover {
+      transform: scale(1.05);
+    }
+    .member img {
+      width: 100%;
+      border-radius: 15px;
+      height: 220px;
+      object-fit: cover;
+    }
+    .member h4 {
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+    .member span {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 100px;
+      padding: 25px 0;
+      text-align: center;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      color: #ccc;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="product.html">Sản phẩm</a>
+    <a href="cart.html">Giỏ hàng</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="login.html">Đăng nhập</a>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Nhóm 5 - Shop Online</h1>
+    <p>Mua sắm hiện đại với phong cách tối giản và công nghệ web tiên tiến</p>
+    <a href="product.html" class="btn">Khám phá ngay</a>
+  </div>
+
+  <!-- Sản phẩm nổi bật -->
+  <section>
+    <h2>Sản phẩm nổi bật</h2>
+    <div class="featured">
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=11" alt="Sản phẩm 1">
+        <div class="card-body">
+          <h3>Sản phẩm A</h3>
+          <p class="price">150.000đ</p>
+          <button>Mua ngay</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=12" alt="Sản phẩm 2">
+        <div class="card-body">
+          <h3>Sản phẩm B</h3>
+          <p class="price">220.000đ</p>
+          <button>Mua ngay</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/400/200?random=13" alt="Sản phẩm 3">
+        <div class="card-body">
+          <h3>Sản phẩm C</h3>
+          <p class="price">320.000đ</p>
+          <button>Mua ngay</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lý do chọn chúng tôi -->
+  <section>
+    <h2>Tại sao chọn chúng tôi</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Giao hàng nhanh</h3>
+        <p>Đảm bảo giao hàng trong 24h tại nội thành và 2-3 ngày cho các tỉnh.</p>
+      </div>
+      <div class="feature">
+        <h3>Sản phẩm chất lượng</h3>
+        <p>Tất cả hàng hoá đều được kiểm định kỹ càng trước khi đến tay khách hàng.</p>
+      </div>
+      <div class="feature">
+        <h3>Hỗ trợ 24/7</h3>
+        <p>Đội ngũ CSKH luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi nơi.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Giới thiệu nhóm -->
+  <section>
+    <h2>Giới thiệu nhóm 5</h2>
+    <div class="team">
+      <div class="member">
+        <!-- <img src="https://picsum.photos/300/200?random=21" alt="Thành viên 1"> -->
+        <h4>Mạc Quốc Bảo</h4>
+        <span>Contact</span>
+      </div>
+      <div class="member">
+        <!-- <img src="https://picsum.photos/300/200?random=22" alt="Thành viên 2"> -->
+        <h4>Trần Nam Anh</h4>
+        <span>Đăng Nhập</span>
+      </div>
+      <div class="member">
+        <!-- <img src="https://picsum.photos/300/200?random=23" alt="Thành viên 3"> -->
+        <h4>Nguyễn Minh Nhật</h4>
+        <span>Giỏ hàng</span>
+      </div>
+      <div class="member">
+        <!-- <img src="https://picsum.photos/300/200?random=24" alt="Thành viên 4"> -->
+        <h4>Vũ Trịnh Hoàng Anh</h4>
+        <span>Sản phẩm</span>
+      </div>
+      <div class="member">
+        <!-- <img src="https://picsum.photos/300/200?random=25" alt="Thành viên 5"> -->
+        <h4>Tạ Kim Nguyên</h4>
+        <span>Trang Chủ</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 FPT Polytechnic | Nhóm 5
+  </footer>
+</body>
+</html>

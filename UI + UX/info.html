@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông tin cá nhân</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .info-container {
+      max-width: 900px;
+      margin: 60px auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 25px;
+      padding: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      animation: fadeIn 1s ease;
+    }
+
+    .info-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      background: linear-gradient(90deg,#fff,#999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .info-section {
+      margin-bottom: 40px;
+    }
+
+    .info-section h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .info-section input, .info-section textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      margin-bottom: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .info-section input:focus, .info-section textarea:focus {
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+
+    .btn-row button {
+      padding: 12px 25px;
+      border: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .btn-row button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="product.html">Sản phẩm</a>
+    <a href="cart.html">Giỏ hàng</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="login.html">Đăng nhập</a>
+  </nav>
+
+  <div class="info-container">
+    <h2>Thông tin cá nhân</h2>
+
+    <div class="info-section">
+      <h3>Chỉnh sửa thông tin</h3>
+      <input type="text" placeholder="Họ và tên">
+      <input type="email" placeholder="Email">
+      <input type="text" placeholder="Số điện thoại">
+      <div class="btn-row">
+        <button>Lưu thay đổi</button>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Sửa địa chỉ</h3>
+      <textarea rows="3" placeholder="Địa chỉ hiện tại..."></textarea>
+      <div class="btn-row">
+        <button>Lưu địa chỉ</button>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>Thêm địa chỉ mới</h3>
+      <textarea rows="3" placeholder="Nhập địa chỉ mới..."></textarea>
+      <div class="btn-row">
+        <button>Thêm địa chỉ</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

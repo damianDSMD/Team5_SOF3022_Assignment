@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liên hệ</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Layout chính */
+    .contact-section {
+      max-width: 1100px;
+      margin: 80px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 40px;
+      padding: 0 30px;
+      animation: fadeIn 1s ease;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      box-shadow: 0 8px 35px rgba(0,0,0,0.6);
+      padding: 40px;
+      transition: 0.4s ease;
+    }
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(255,255,255,0.15);
+    }
+
+    .contact-card h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg,#fff,#aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Thông tin liên hệ */
+    .contact-info p {
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .contact-info svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      stroke: #fff;
+      opacity: 0.8;
+      transition: 0.3s;
+    }
+
+    .contact-info a {
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .contact-info a:hover, .contact-info svg:hover {
+      color: #00e0ff;
+      stroke: #00e0ff;
+    }
+
+    /* Form liên hệ */
+    .contact-form form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-form input, .contact-form textarea {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: 20px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .contact-form input:focus, .contact-form textarea:focus {
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 0 10px rgba(255,255,255,0.25);
+    }
+
+    .contact-form button {
+      border: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 25px;
+      padding: 12px;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .contact-form button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    /* Bản đồ */
+    .map {
+      margin-top: 25px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+    }
+    iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 100px;
+      padding: 25px 0;
+      text-align: center;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      color: #ccc;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    footer a:hover {
+      color: #00e0ff;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="product.html">Sản phẩm</a>
+    <a href="cart.html">Giỏ hàng</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="login.html">Đăng nhập</a>
+  </nav>
+
+  <section class="contact-section">
+
+    <!-- Thông tin liên hệ -->
+    <div class="contact-card contact-info">
+      <h2>Thông tin liên hệ</h2>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2 8l10 6 10-6" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M22 8v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8" />
+        </svg>
+        <a href="mailto:ABC@gmail.com">ABC@gmail.com</a>
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.494a1 1 0 01-.272 1.04l-2.548 2.548a11.042 11.042 0 005.516 5.516l2.548-2.548a1 1 0 011.04-.272l4.494 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+        <span>09***</span>
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7z" />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>123 Nguyễn Văn Linh, Quận 7, TP.HCM</span>
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12A9 9 0 113 12a9 9 0 0118 0z" />
+        </svg>
+        <span>Thứ 2 - Chủ nhật: 8:00 - 22:00</span>
+      </p>
+
+      <div class="map">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.6596809888054!2d106.68220751533468!3d10.7626227923287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ec7aaf5f45f%3A0x6274a02795ec829b!2zUXXhuq1uIDcsIFF14buRYSwgUXXhuqVuIDcsIFRow6BuaCBwaOG7kSBow7NhIE1pbmgsIFRow6BuaCBwaOG7kSBow7NhIFNvbmcsIFZpZXRuYW0!5e0!3m2!1svi!2s!4v1700000000000"
+          allowfullscreen=""
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Form liên hệ -->
+    <div class="contact-card contact-form">
+      <h2>Gửi tin nhắn</h2>
+      <form action="/contact" method="post">
+        <input type="text" name="name" placeholder="Họ và tên" required>
+        <input type="email" name="email" placeholder="Email của bạn" required>
+        <textarea name="message" rows="6" placeholder="Nội dung tin nhắn..." required></textarea>
+        <button type="submit">Gửi liên hệ</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 FPT Polytechnic | Thiết kế bởi Nhóm 5 | Liên hệ: <a href="mailto:ABC@gmail.com">ABC@gmail.com</a>
+  </footer>
+
+</body>
+</html>

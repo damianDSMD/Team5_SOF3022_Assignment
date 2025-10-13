@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .payment-container {
+      max-width: 900px;
+      margin: 60px auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 25px;
+      padding: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      animation: fadeIn 1s ease;
+    }
+
+    .payment-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      background: linear-gradient(90deg,#fff,#999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      outline: none;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
+
+    form input:focus, form select:focus, form textarea:focus {
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .payment-summary {
+      background: rgba(255,255,255,0.08);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .payment-summary p {
+      margin: 8px 0;
+      color: #ccc;
+    }
+
+    .payment-summary strong {
+      color: #fff;
+    }
+
+    .btn-row {
+      text-align: right;
+      margin-top: 25px;
+    }
+
+    .btn-row button {
+      padding: 12px 25px;
+      border: 2px solid #fff;
+      border-radius: 25px;
+      background: transparent;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .btn-row button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="product.html">Sản phẩm</a>
+    <a href="cart.html">Giỏ hàng</a>
+    <a href="contact.html">Liên hệ</a>
+    <a href="login.html">Đăng nhập</a>
+  </nav>
+
+  <div class="payment-container">
+    <h2>Thanh toán đơn hàng</h2>
+    <form action="/payment" method="post">
+      <label for="fullname">Họ và tên</label>
+      <input type="text" id="fullname" name="fullname" required>
+
+      <label for="address">Địa chỉ giao hàng</label>
+      <textarea id="address" name="address" rows="3" required></textarea>
+
+      <label for="method">Phương thức thanh toán</label>
+      <select id="method" name="method" required>
+        <option value="">-- Chọn phương thức --</option>
+        <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+        <option value="bank">Chuyển khoản ngân hàng</option>
+        <option value="momo">Ví MoMo</option>
+      </select>
+
+      <div class="payment-summary">
+        <p><strong>Tổng tiền hàng:</strong> 500.000đ</p>
+        <p><strong>Phí vận chuyển:</strong> 30.000đ</p>
+        <p><strong>Tổng thanh toán:</strong> 530.000đ</p>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit">Xác nhận thanh toán</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
