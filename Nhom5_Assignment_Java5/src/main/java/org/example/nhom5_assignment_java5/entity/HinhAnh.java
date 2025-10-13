@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "HinhAnh")  // Chỉ định chính xác tên bảng
+@Table(name = "HinhAnh")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
