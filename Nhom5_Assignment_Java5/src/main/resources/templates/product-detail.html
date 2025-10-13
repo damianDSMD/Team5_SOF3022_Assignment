@@ -170,8 +170,7 @@
             <img th:unless="${product.hinhAnhs != null and !product.hinhAnhs.isEmpty()}"
                  src="https://picsum.photos/600/500?grayscale&random=1"
                  th:alt="${product.tenSP}"
-                 class="product-main-image"
-                 id="mainImage">
+                 class="product-main-image">
 
             <!-- Thumbnails (nếu có nhiều hình) -->
             <div class="product-thumbnails" th:if="${product.hinhAnhs != null and product.hinhAnhs.size() > 1}">
@@ -179,7 +178,7 @@
                      th:src="${img.filePath}"
                      th:alt="${img.tenHA}"
                      th:class="${iterStat.index == 0 ? 'active' : ''}"
-                     class="thumbnail-img">
+                     th:onclick="'changeImage(this.src)'">
             </div>
         </div>
 
@@ -216,8 +215,7 @@
             <div class="product-actions">
                 <a th:href="@{/}" class="btn-back">← Quay lại</a>
                 <button class="btn-add-cart"
-                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}"
-                        id="addToCartBtn">
+                        th:onclick="'addToCart(\'' + ${product.maSP} + '\', \'' + ${product.tenSP} + '\')'">
                     Thêm vào giỏ hàng
                 </button>
             </div>
@@ -234,37 +232,28 @@
 </div>
 
 <script>
-    // Đổi hình ảnh chính khi click thumbnail
-    document.addEventListener('DOMContentLoaded', function() {
-        const thumbnails = document.querySelectorAll('.thumbnail-img');
-        const mainImage = document.getElementById('mainImage');
+    // Đổi hình ảnh chính
+    function changeImage(src) {
+        document.getElementById('mainImage').src = src;
 
-        thumbnails.forEach(function(thumbnail) {
-            thumbnail.addEventListener('click', function() {
-                const newSrc = this.src;
-                mainImage.src = newSrc;
-
-                // Đánh dấu thumbnail active
-                thumbnails.forEach(img => img.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // Đánh dấu thumbnail active
+        const thumbnails = document.querySelectorAll('.product-thumbnails img');
+        thumbnails.forEach(img => {
+            img.classList.remove('active');
+            if (img.src === src) {
+                img.classList.add('active');
+            }
         });
+    }
 
-        // Thêm vào giỏ hàng
-        const addBtn = document.getElementById('addToCartBtn');
-        if (addBtn) {
-            addBtn.addEventListener('click', function() {
-                const maSP = this.getAttribute('data-id');
-                const tenSP = this.getAttribute('data-name');
-                const quantity = document.getElementById('quantity').value;
+    // Thêm vào giỏ hàng
+    function addToCart(maSP, tenSP) {
+        const quantity = document.getElementById('quantity').value;
+        console.log('Thêm', quantity, 'sản phẩm:', maSP, tenSP);
+        alert('Đã thêm ' + quantity + ' "' + tenSP + '" vào giỏ hàng!');
 
-                console.log('Thêm', quantity, 'sản phẩm:', maSP, tenSP);
-                alert('Đã thêm ' + quantity + ' "' + tenSP + '" vào giỏ hàng!');
-
-                // TODO: Gọi API để thêm vào giỏ hàng
-            });
-        }
-    });
+        // TODO: Gọi API để thêm vào giỏ hàng
+    }
 </script>
 </body>
 </html>
