@@ -3,6 +3,7 @@ USE Nhom5_Java5;
 COLLATE Vietnamese_100_CI_AI_SC_UTF8;
 GO
 drop database Nhom5_Java5
+drop table GioHang
 -- Create KhachHang table
 CREATE TABLE KhachHang (
     MaKH INT IDENTITY(1,1) PRIMARY KEY,
@@ -15,10 +16,12 @@ CREATE TABLE KhachHang (
 
 -- Create GioHang table
 CREATE TABLE GioHang (
-    MaGH VARCHAR(50) PRIMARY KEY,
-    MaKH INT IDENTITY(1,1),
+    MaGH INT IDENTITY(1,1) PRIMARY KEY,
+    MaKH INT,
+    MaSP VARCHAR(50) NOT NULL,
     SoLuong INT,
-    FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
+    FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH),
+    CONSTRAINT FK_GioHang_MaSP FOREIGN KEY (MaSP) REFERENCES SanPham(MaSP)
 );
 
 -- Create DiaChi table
@@ -33,7 +36,7 @@ CREATE TABLE DiaChi (
 -- Create HoaDon table
 CREATE TABLE HoaDon (
     MaHD VARCHAR(50) PRIMARY KEY,
-    MaKH INT IDENTITY(1,1),
+    MaKH INT,
     MaNV VARCHAR(50),
     MaDC VARCHAR(50),
     NgayTaoHD DATE,
