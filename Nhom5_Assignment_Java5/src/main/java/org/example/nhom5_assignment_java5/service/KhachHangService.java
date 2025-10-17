@@ -1,5 +1,6 @@
 package org.example.nhom5_assignment_java5.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.nhom5_assignment_java5.entity.KhachHang;
 import org.example.nhom5_assignment_java5.repository.KhachHangRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ public class KhachHangService {
     @Autowired
     private KhachHangRepository repo;
 
+    @Autowired
+    private HttpSession session;
     public String dangKy(KhachHang kh) {
         if (repo.findByEmail(kh.getEmail()).isPresent()) {
             return "Email đã tồn tại!";
@@ -24,5 +27,8 @@ public class KhachHangService {
 
     public KhachHang dangNhap(String email, String password) {
         return repo.findByEmailAndPassword(email, password);
+    }
+    public KhachHang getCurrentKhachHang() {
+        return (KhachHang) session.getAttribute("khachHang");
     }
 }
