@@ -9,7 +9,7 @@ public class DiaChi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto identity
     @Column(name = "MaDC")
-    private Integer maDC;
+    private String maDC;
 
     @ManyToOne
     @JoinColumn(name = "MaKH", nullable = false)
@@ -22,11 +22,11 @@ public class DiaChi {
     private Boolean macDinh;
 
     // Getters & setters
-    public Integer getMaDC() {
+    public String getMaDC() {
         return maDC;
     }
 
-    public void setMaDC(Integer maDC) {
+    public void setMaDC(String maDC) {
         this.maDC = maDC;
     }
 

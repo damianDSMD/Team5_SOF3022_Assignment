@@ -3,7 +3,7 @@ package org.example.nhom5_assignment_java5.dto;
 import java.util.List;
 
 public class CheckoutForm {
-    private Integer diaChiId;    // nếu chọn địa chỉ
+    private String diaChiId;    // nếu chọn địa chỉ
     private String diaChiText;   // nếu nhập mới
     private String ghiChu;
     private List<CartItem> items;
@@ -12,7 +12,7 @@ public class CheckoutForm {
         return diaChiId;
     }
 
-    public void setDiaChiId(Integer diaChiId) {
+    public void setDiaChiId(String diaChiId) {
         this.diaChiId = diaChiId;
     }
 

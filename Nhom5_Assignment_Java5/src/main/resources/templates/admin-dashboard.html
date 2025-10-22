@@ -1,466 +1,122 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard • Bài mới</title>
-  <!-- Giữ nguyên CSS bạn đã gửi, chỉ tham chiếu đúng tên file -->
-  <link rel="stylesheet" href="style (2).css" />
-
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
-    /* BỔ SUNG NHẸ để bố cục sidebar + topbar + animation (không thay theme chính) */
+    /* light local layout helpers */
     :root { --gap: 16px; }
-    body { display: grid; grid-template-rows: 60px 1fr; min-height: 100vh; }
-    .topbar { display:flex; align-items:center; justify-content:space-between; padding:0 16px; border-bottom:1px solid rgba(255,255,255,.08); backdrop-filter: blur(8px); position: sticky; top:0; z-index:20; }
-    .brand { display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing: .5px; }
-    .brand .dot { width:10px; height:10px; border-radius:999px; background:#b76cf6; box-shadow:0 0 12px #b76cf6aa; }
-    .top-actions { display:flex; gap:10px; align-items:center; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:#0f1724; color:#e6eef8; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; background: rgba(255,255,255,0.02); backdrop-filter: blur(6px); position: sticky; top:0; z-index:20; }
     .layout { display:grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 60px); }
-    .sidebar { border-right:1px solid rgba(255,255,255,.08); padding:16px; position: sticky; top:60px; height: calc(100vh - 60px); overflow:auto; }
-    .sidegroup { margin-bottom:18px; }
-    .sidegroup h4 { opacity:.8; font-size:12px; margin-bottom:8px; text-transform:uppercase; letter-spacing:.8px; }
-    .sidelink { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; cursor:pointer; }
-    .sidelink.active { outline:1px solid rgba(183,108,246,.45); background:rgba(183,108,246,.10); }
-
-    main { padding:20px; }
-    .section { display:none; }
-    .section.active { display:block; }
-
-    /* Card + grid helpers */
-    .grid { display:grid; gap: var(--gap); }
-    .grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .flex { display:flex; gap:10px; align-items:center; }
-    .between { justify-content:space-between; }
-
-    /* Status pill */
-    .status { padding: 4px 10px; border-radius: 999px; font-size: 12px; white-space:nowrap; }
-    .status.success { background: rgba(46, 204, 113, .18); color: #2ecc71; border: 1px solid rgba(46,204,113,.35); }
-    .status.warn    { background: rgba(241, 196, 15, .18); color: #f1c40f; border: 1px solid rgba(241,196,15,.35); }
-    .status.danger  { background: rgba(231, 76, 60, .18); color: #e74c3c; border: 1px solid rgba(231,76,60,.35); }
-
-    /* Toolbar */
-    .toolbar { display:flex; gap:10px; flex-wrap:wrap; margin: 8px 0 14px; }
-
-    /* Animations */
-    .tab-enter { opacity:0; transform: translateY(8px); }
-    .tab-enter.tab-enter-active { opacity:1; transform:none; transition: opacity .28s ease, transform .28s ease; }
-    .fade-pop { animation: fadepop .32s ease; }
-    @keyframes fadepop { from{opacity:0; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
-
-    /* Modal */
-    .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 50; }
-    .modal { width: min(560px, 92vw); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(12px); border-radius: 14px; padding: 16px; }
-
-    @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .layout { grid-template-columns: 72px 1fr; } .sidebar .txt { display:none; } }
-    @media (max-width: 640px)  { .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+    .sidebar { padding:18px; border-right: 1px solid rgba(255,255,255,.04); background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .content { padding:20px; }
+    .card { background: rgba(255,255,255,0.02); padding:14px; border-radius:12px; box-shadow: 0 4px 18px rgba(0,0,0,0.5); }
+    .grid { display:grid; gap:16px; grid-template-columns: repeat(3, 1fr); margin-bottom:20px; }
+    table { width:100%; border-collapse: collapse; }
+    table th, table td { text-align:left; padding:8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .muted { color: #9aa7bf; font-size:0.9rem; }
   </style>
 </head>
 <body>
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="brand">
-      <span class="dot"></span>
-      <span>.brq Admin</span>
-    </div>
-    <div class="top-actions">
-      <input id="global-search" type="text" placeholder="Tìm nhanh trong bảng..." />
-      <button id="refresh">Làm mới</button>
-    </div>
-  </header>
+<div class="topbar">
+  <div class="brand"><span style="width:10px;height:10px;border-radius:99px;background:#b76cf6;margin-right:8px;display:inline-block;"></span><strong>Admin</strong></div>
+  <div class="top-actions muted">Xin chào, Admin</div>
+</div>
 
-  <div class="layout">
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidegroup">
-        <h4>Điều hướng</h4>
-        <div class="sidelink active" data-tab="overview"><span class="txt">Quản lý</span></div>
-        <div class="sidelink" data-tab="hr"><span class="txt">Nhân sự</span></div>
-        <div class="sidelink" data-tab="inventory"><span class="txt">Kho hàng</span></div>
-        <div class="sidelink" data-tab="orders"><span class="txt">Duyệt/Hủy đơn</span></div>
+<div class="layout">
+  <aside class="sidebar">
+    <nav>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li><a th:href="@{/admin}" style="color:inherit;text-decoration:none;">Dashboard</a></li>
+        <li><a th:href="@{/admin/customers}" style="color:inherit;text-decoration:none;">Khách hàng</a></li>
+        <li><a th:href="@{/admin/products}" style="color:inherit;text-decoration:none;">Sản phẩm</a></li>
+        <li><a th:href="@{/admin/orders}" style="color:inherit;text-decoration:none;">Đơn hàng</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="grid">
+      <div class="card">
+        <div class="muted">Khách hàng</div>
+        <h2 th:text="${customerCount}">0</h2>
       </div>
-    </aside>
+      <div class="card">
+        <div class="muted">Sản phẩm</div>
+        <h2 th:text="${productCount}">0</h2>
+      </div>
+      <div class="card">
+        <div class="muted">Đơn hàng</div>
+        <h2 th:text="${orderCount}">0</h2>
+      </div>
+    </div>
 
-    <!-- CONTENT -->
-    <main>
-      <!-- OVERVIEW -->
-      <section id="tab-overview" class="section active tab-enter">
-        <div class="flex between">
-          <h2>Tổng quan</h2>
-          <div class="toolbar">
-            <input type="text" id="search-overview" placeholder="Tìm trong nhật ký..." />
-            <button type="button" id="btn-refresh-overview">Làm mới</button>
-          </div>
-        </div>
-
-        <div class="grid grid-4">
-          <div class="card fade-pop">
-            <div class="card-body">
-              <h3>Doanh thu hôm nay</h3>
-              <p class="price" id="rev-today">3.250.000đ</p>
-              <span class="status success">+8.2% so với hôm qua</span>
-            </div>
-          </div>
-          <div class="card fade-pop">
-            <div class="card-body">
-              <h3>Đơn chờ duyệt</h3>
-              <p class="price" id="orders-pending">12</p>
-              <span class="status warn">Cần xử lý</span>
-            </div>
-          </div>
-          <div class="card fade-pop">
-            <div class="card-body">
-              <h3>Sản phẩm sắp hết</h3>
-              <p class="price" id="low-stock">5</p>
-              <span class="status danger">Kiểm tra kho</span>
-            </div>
-          </div>
-          <div class="card fade-pop">
-            <div class="card-body">
-              <h3>Nhân sự đang online</h3>
-              <p class="price" id="staff-online">7</p>
-              <span class="status success">Ổn định</span>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:22px">
-          <h3 style="margin-bottom:10px">Nhật ký hoạt động</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Thời gian</th>
-                <th>Người thực hiện</th>
-                <th>Hành động</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody id="audit-table">
-              <tr>
-                <td>18:40</td>
-                <td>BaoRq</td>
-                <td>Duyệt đơn #A1029</td>
-                <td><span class="status success">Hoàn tất</span></td>
-              </tr>
-              <tr>
-                <td>17:10</td>
-                <td>Maihuz</td>
-                <td>Thêm nhân viên NV005</td>
-                <td><span class="status success">Thành công</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- HR -->
-      <section id="tab-hr" class="section tab-enter">
-        <div class="flex between">
-          <h2>Quản lý nhân sự</h2>
-          <div class="toolbar">
-            <input type="text" id="search-hr" placeholder="Tìm nhân sự..." />
-            <button type="button" onclick="openModal('hr-modal')">+ Thêm nhân sự</button>
-          </div>
-        </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+      <section class="card">
+        <h3 style="margin-top:0">Đơn hàng gần đây</h3>
         <table>
           <thead>
-            <tr>
-              <th>Mã NV</th>
-              <th>Họ tên</th>
-              <th>Chức vụ</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
-            </tr>
+          <tr><th>Mã</th><th>Khách hàng</th><th>Ngày</th><th>Tổng tiền</th><th>Trạng thái</th></tr>
           </thead>
-          <tbody id="hr-table">
-            <tr>
-              <td>NV001</td>
-              <td>Nguyễn Văn A</td>
-              <td>Kho</td>
-              <td><span class="status success">Đang làm</span></td>
-              <td class="flex"><button onclick="editHR(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-            </tr>
-            <tr>
-              <td>NV002</td>
-              <td>Trần Thị B</td>
-              <td>CSKH</td>
-              <td><span class="status warn">Tạm nghỉ</span></td>
-              <td class="flex"><button onclick="editHR(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-            </tr>
+          <tbody>
+          <tr th:each="o : ${recentOrders}">
+            <td th:text="${o.id}">1</td>
+            <td th:text="${o.khachHang != null ? o.khachHang.tenKH : '—'}">Nguyễn A</td>
+            <td th:text="${o.ngayTao != null ? #dates.format(o.ngayTao, 'dd/MM/yyyy HH:mm') : '—'}">01/01/2025</td>
+            <td th:text="${o.tongTien != null ? #numbers.formatDecimal(o.tongTien, 0, 'COMMA', 2, 'POINT') : '0'}">0</td>
+            <td th:text="${o.trangThai}">Chờ xác nhận</td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(recentOrders)}"><td colspan="5" class="muted">Không có đơn hàng</td></tr>
           </tbody>
         </table>
       </section>
 
-      <!-- INVENTORY -->
-      <section id="tab-inventory" class="section tab-enter">
-        <div class="flex between">
-          <h2>Kho hàng</h2>
-          <div class="toolbar">
-            <input type="text" id="search-inv" placeholder="Tìm sản phẩm..." />
-            <button type="button" onclick="openModal('inv-modal')">+ Thêm hàng</button>
-          </div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Mã SP</th>
-              <th>Tên sản phẩm</th>
-              <th>Tồn kho</th>
-              <th>Giá</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody id="inv-table">
-            <tr>
-              <td>M365-1Y</td>
-              <td>Microsoft 365 Personal (1 năm)</td>
-              <td>3</td>
-              <td>200.000đ</td>
-              <td><span class="status warn">Sắp hết</span></td>
-              <td class="flex"><button onclick="editINV(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-            </tr>
-            <tr>
-              <td>YT-PREM</td>
-              <td>YouTube Premium</td>
-              <td>24</td>
-              <td>75.000đ</td>
-              <td><span class="status success">Còn hàng</span></td>
-              <td class="flex"><button onclick="editINV(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      <aside class="card">
+        <h4 style="margin-top:0">Tổng doanh thu</h4>
+        <div style="font-size:1.6rem;font-weight:700" th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',2,'POINT')}">0</div>
 
-      <!-- ORDERS -->
-      <section id="tab-orders" class="section tab-enter">
-        <div class="flex between">
-          <h2>Duyệt đơn / Hủy đơn</h2>
-          <div class="toolbar">
-            <input type="text" id="search-orders" placeholder="Tìm đơn hàng..." />
-            <button type="button" onclick="bulkApprove()">Duyệt tất cả</button>
-          </div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Khách hàng</th>
-              <th>Sản phẩm</th>
-              <th>Tổng</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody id="orders-table">
-            <tr>
-              <td>A1029</td>
-              <td>kimcheese1@freesourecodes.com</td>
-              <td>Netflix 1T</td>
-              <td>65.000đ</td>
-              <td><span class="status warn">Chờ duyệt</span></td>
-              <td class="flex"><button onclick="approve(this)">Duyệt</button><button onclick="reject(this)">Hủy</button></td>
-            </tr>
-            <tr>
-              <td>A1030</td>
-              <td>maihuz@example.com</td>
-              <td>Discord Nitro</td>
-              <td>750.000đ</td>
-              <td><span class="status warn">Chờ duyệt</span></td>
-              <td class="flex"><button onclick="approve(this)">Duyệt</button><button onclick="reject(this)">Hủy</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </main>
-  </div>
+        <hr style="border-color: rgba(255,255,255,0.03); margin:12px 0">
 
-  <!-- MODALS -->
-  <div id="hr-modal" class="backdrop" onclick="backdropClose(event)">
-    <div class="modal">
-      <h3 style="margin-bottom:10px">Thêm / Sửa nhân sự</h3>
-      <div class="flex" style="flex-wrap:wrap">
-        <input id="hr-id" placeholder="Mã NV (VD: NV003)" />
-        <input id="hr-name" placeholder="Họ tên" />
-      </div>
-      <div class="flex" style="flex-wrap:wrap">
-        <input id="hr-role" placeholder="Chức vụ" />
-        <select id="hr-state">
-          <option value="success">Đang làm</option>
-          <option value="warn">Tạm nghỉ</option>
-          <option value="danger">Nghỉ việc</option>
-        </select>
-      </div>
-      <div class="flex between" style="margin-top:10px">
-        <button onclick="closeModal('hr-modal')">Đóng</button>
-        <button id="hr-save">Lưu</button>
-      </div>
+        <h5>Trạng thái đơn</h5>
+        <ul style="padding-left:0;list-style:none">
+          <li th:each="e : ${ordersByStatus}">
+            <span th:text="${e.key}">Trạng thái</span>
+            <span style="float:right" th:text="${e.value}">0</span>
+          </li>
+        </ul>
+
+        <hr style="border-color: rgba(255,255,255,0.03); margin:12px 0">
+
+        <h5>Top sản phẩm</h5>
+        <ul style="padding-left:0;list-style:none">
+          <li th:each="p : ${topProducts}">
+            <span th:text="${p.key}">Sản phẩm</span>
+            <span style="float:right" th:text="${p.value}">0</span>
+          </li>
+          <li th:if="${#maps.isEmpty(topProducts)}" class="muted">Không có dữ liệu</li>
+        </ul>
+      </aside>
     </div>
-  </div>
 
-  <div id="inv-modal" class="backdrop" onclick="backdropClose(event)">
-    <div class="modal">
-      <h3 style="margin-bottom:10px">Thêm / Sửa sản phẩm</h3>
-      <div class="flex" style="flex-wrap:wrap">
-        <input id="inv-id" placeholder="Mã SP (VD: M365-1Y)" />
-        <input id="inv-name" placeholder="Tên sản phẩm" />
-      </div>
-      <div class="flex" style="flex-wrap:wrap">
-        <input id="inv-stock" type="number" placeholder="Tồn kho" />
-        <input id="inv-price" placeholder="Giá (VD: 200.000đ)" />
-      </div>
-      <div class="flex between" style="margin-top:10px">
-        <button onclick="closeModal('inv-modal')">Đóng</button>
-        <button id="inv-save">Lưu</button>
-      </div>
+    <div style="margin-top:18px" class="card">
+      <h4 style="margin-top:0">Khách hàng mới</h4>
+      <table>
+        <thead><tr><th>Mã</th><th>Tên</th><th>SĐT</th><th>Email</th></tr></thead>
+        <tbody>
+        <tr th:each="c : ${recentCustomers}">
+          <td th:text="${c.maKH}">1</td>
+          <td th:text="${c.tenKH}">Nguyễn A</td>
+          <td th:text="${c.sdt}">0123456789</td>
+          <td th:text="${c.email}">a@example.com</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(recentCustomers)}"><td colspan="4" class="muted">Không có khách hàng</td></tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-
-  <script>
-    // ====== NAV: SIDEBAR + TOPBAR ======
-    const tabLinks = document.querySelectorAll('.sidelink');
-    const sections = document.querySelectorAll('.section');
-
-    function showTab(key){
-      sections.forEach(s => s.classList.remove('active','tab-enter-active'));
-      const el = document.querySelector(`#tab-${key}`);
-      el.classList.add('active','tab-enter');
-      requestAnimationFrame(()=> el.classList.add('tab-enter-active'));
-      tabLinks.forEach(l => l.classList.toggle('active', l.dataset.tab === key));
-    }
-    tabLinks.forEach(l => l.addEventListener('click', () => showTab(l.dataset.tab)));
-
-    // Default tab
-    showTab('overview');
-
-    // Global search (lọc bảng hiện tại theo keyword)
-    const globalSearch = document.getElementById('global-search');
-    globalSearch.addEventListener('input', () => {
-      const active = document.querySelector('.section.active');
-      const tb = active.querySelector('tbody');
-      if(!tb) return;
-      const k = globalSearch.value.toLowerCase();
-      tb.querySelectorAll('tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(k) ? '' : 'none');
-    });
-
-    document.getElementById('refresh').addEventListener('click', () => location.reload());
-
-    // ====== HELPERS ======
-    const $ = (q) => document.querySelector(q);
-    function openModal(id){ document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id){ document.getElementById(id).style.display = 'none'; editingCtx = null; }
-    function backdropClose(e){ if(e.target.classList.contains('backdrop')) e.target.style.display = 'none'; }
-    function removeRow(btn){ const tr = btn.closest('tr'); tr.style.opacity = .5; setTimeout(()=>tr.remove(),150); }
-
-    // ====== HR CRUD ======
-    let editingCtx = null; // {type:'hr'|'inv', tr}
-
-    function editHR(btn){
-      const tr = btn.closest('tr');
-      const [id,name,role,stateTd] = [...tr.children];
-      $('#hr-id').value = id.textContent.trim();
-      $('#hr-name').value = name.textContent.trim();
-      $('#hr-role').value = role.textContent.trim();
-      const state = stateTd.querySelector('.status');
-      $('#hr-state').value = state.classList.contains('danger') ? 'danger' : state.classList.contains('warn') ? 'warn' : 'success';
-      openModal('hr-modal');
-      editingCtx = { type:'hr', tr };
-    }
-
-    $('#hr-save').addEventListener('click', () => {
-      const id = $('#hr-id').value.trim();
-      const name = $('#hr-name').value.trim();
-      const role = $('#hr-role').value.trim();
-      const state = $('#hr-state').value;
-      if(!id||!name||!role) return alert('Điền đủ thông tin');
-
-      const pillLabel = state==='success'?'Đang làm': state==='warn'?'Tạm nghỉ':'Nghỉ việc';
-      if(editingCtx?.type==='hr'){
-        const tds = editingCtx.tr.children;
-        tds[0].textContent=id; tds[1].textContent=name; tds[2].textContent=role; 
-        tds[3].innerHTML = `<span class="status ${state}">${pillLabel}</span>`;
-      } else {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${id}</td>
-          <td>${name}</td>
-          <td>${role}</td>
-          <td><span class="status ${state}">${pillLabel}</span></td>
-          <td class="flex"><button onclick="editHR(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-        `;
-        $('#hr-table').appendChild(tr);
-      }
-      closeModal('hr-modal');
-    });
-
-    // Nút thêm mới (mở modal trống)
-    window.openModal = (id)=>{
-      if(id==='hr-modal'){ $('#hr-id').value=''; $('#hr-name').value=''; $('#hr-role').value=''; $('#hr-state').value='success'; editingCtx=null; }
-      if(id==='inv-modal'){ $('#inv-id').value=''; $('#inv-name').value=''; $('#inv-stock').value=''; $('#inv-price').value=''; editingCtx=null; }
-      document.getElementById(id).style.display='flex';
-    }
-
-    // ====== INVENTORY CRUD ======
-    function editINV(btn){
-      const tr = btn.closest('tr');
-      const [id,name,stock,price,stateTd] = [...tr.children];
-      $('#inv-id').value = id.textContent.trim();
-      $('#inv-name').value = name.textContent.trim();
-      $('#inv-stock').value = stock.textContent.trim();
-      $('#inv-price').value = price.textContent.trim();
-      openModal('inv-modal');
-      editingCtx = { type:'inv', tr };
-    }
-
-    $('#inv-save').addEventListener('click', () => {
-      const id = $('#inv-id').value.trim();
-      const name = $('#inv-name').value.trim();
-      const stock = $('#inv-stock').value.trim();
-      const price = $('#inv-price').value.trim();
-      if(!id||!name||!stock||!price) return alert('Điền đủ thông tin');
-      const low = parseInt(stock,10)<=5; const state = low?'warn':'success'; const label = low?'Sắp hết':'Còn hàng';
-
-      if(editingCtx?.type==='inv'){
-        const tds = editingCtx.tr.children;
-        tds[0].textContent=id; tds[1].textContent=name; tds[2].textContent=stock; tds[3].textContent=price;
-        tds[4].innerHTML = `<span class=\"status ${state}\">${label}</span>`;
-      } else {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${id}</td>
-          <td>${name}</td>
-          <td>${stock}</td>
-          <td>${price}</td>
-          <td><span class="status ${state}">${label}</span></td>
-          <td class="flex"><button onclick="editINV(this)">Sửa</button><button onclick="removeRow(this)">Xóa</button></td>
-        `;
-        $('#inv-table').appendChild(tr);
-      }
-      closeModal('inv-modal');
-    });
-
-    // ====== ORDERS (Duyệt/Hủy) ======
-    function approve(btn){ const td = btn.closest('tr').querySelector('td:nth-child(5)'); td.innerHTML = '<span class="status success">Đã duyệt</span>'; }
-    function reject(btn){ const td = btn.closest('tr').querySelector('td:nth-child(5)'); td.innerHTML = '<span class="status danger">Đã hủy</span>'; }
-    function bulkApprove(){ document.querySelectorAll('#orders-table tr').forEach(tr => { const td = tr.querySelector('td:nth-child(5)'); if(td && td.innerText.includes('Chờ duyệt')) td.innerHTML = '<span class="status success">Đã duyệt</span>'; }); }
-
-    // ====== BỘ LỌC TẠI TỪNG TAB ======
-    function attachSearch(inputId, tbodyId){
-      const ip = document.getElementById(inputId); const body = document.getElementById(tbodyId);
-      ip.addEventListener('input',()=>{ const k=ip.value.toLowerCase(); body.querySelectorAll('tr').forEach(r=> r.style.display = r.innerText.toLowerCase().includes(k)?'':'none'); });
-    }
-    attachSearch('search-overview','audit-table');
-    attachSearch('search-hr','hr-table');
-    attachSearch('search-inv','inv-table');
-    attachSearch('search-orders','orders-table');
-
-    // Expose some funcs to inline handlers
-    window.backdropClose = backdropClose;
-    window.removeRow = removeRow;
-    window.editHR = editHR; window.editINV = editINV;
-    window.approve = approve; window.reject = reject; window.bulkApprove = bulkApprove;
-    window.closeModal = closeModal; window.openModal = openModal;
-  </script>
+  </main>
+</div>
 </body>
 </html>
