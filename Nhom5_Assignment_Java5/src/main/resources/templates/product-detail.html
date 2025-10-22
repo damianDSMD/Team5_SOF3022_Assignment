@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
         /* ⛔️ Your original CSS remains untouched ⛔️ */
+
         .product-detail {
             max-width: 1200px;
             margin: 50px auto;
@@ -128,7 +129,7 @@
                 <input type="number" id="quantity" value="1" min="1" th:max="${product.soLuongTonKho}">
             </div>
 
-            <!-- ✅ FIXED SECTION BELOW -->
+            <!-- ✅ ADD TO CART FUNCTIONALITY -->
             <div class="product-actions">
                 <a th:href="@{/}" class="btn-back">← Quay lại</a>
                 <button class="btn-add-cart"
@@ -137,7 +138,6 @@
                     Thêm vào giỏ hàng
                 </button>
             </div>
-            <!-- ✅ END FIX -->
         </div>
     </div>
 </div>
@@ -159,46 +159,39 @@
         });
     }
 
-    // ✅ Updated JS - use data attributes safely
-    function addToCart(button) {
+    // ✅ Real addToCart AJAX request (linked to GioHangController)
+    async function addToCart(button) {
         const maSP = button.getAttribute('data-id');
         const tenSP = button.getAttribute('data-name');
-        const quantity = document.getElementById('quantity').value;
-        console.log('Thêm', quantity, 'sản phẩm:', maSP, tenSP);
-        alert('Đã thêm ' + quantity + ' "' + tenSP + '" vào giỏ hàng!');
-    }
-    const maxVisible = 8; // 👈 number of products visible at first
-    document.addEventListener("DOMContentLoaded", function () {
-        const products = document.querySelectorAll(".card");
-        const loadMoreBtn = document.createElement("button");
-        loadMoreBtn.textContent = "Xem thêm sản phẩm";
-        loadMoreBtn.className = "btn-load-more";
-        loadMoreBtn.style.display = "block";
-        loadMoreBtn.style.margin = "20px auto";
-        loadMoreBtn.style.padding = "10px 20px";
-        loadMoreBtn.style.borderRadius = "10px";
-        loadMoreBtn.style.background = "#fff";
-        loadMoreBtn.style.color = "#000";
-        loadMoreBtn.style.cursor = "pointer";
-        loadMoreBtn.style.fontWeight = "bold";
-        loadMoreBtn.style.border = "2px solid #fff";
+        const soLuong = document.getElementById('quantity').value;
 
-        // Hide products beyond maxVisible
-        products.forEach((card, index) => {
-            if (index >= maxVisible) card.style.display = "none";
-        });
+        try {
+            const response = await fetch("/cart/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `maSP=${encodeURIComponent(maSP)}&soLuong=${encodeURIComponent(soLuong)}`
+            });
 
-        // Show button only if needed
-        if (products.length > maxVisible) {
-            document.querySelector(".container").appendChild(loadMoreBtn);
+            if (response.status === 401) {
+                alert("⚠️ Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+                window.location.href = "/login";
+                return;
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                alert(`✅ Đã thêm ${soLuong} "${tenSP}" vào giỏ hàng!`);
+                const cartCount = document.getElementById("cartCount");
+                if (cartCount) cartCount.textContent = data.totalItems;
+            } else {
+                alert("❌ Không thể thêm sản phẩm vào giỏ hàng!");
+            }
+        } catch (err) {
+            console.error("Lỗi khi thêm vào giỏ hàng:", err);
+            alert("❌ Lỗi kết nối đến server!");
         }
-
-        // Click event to reveal more
-        loadMoreBtn.addEventListener("click", () => {
-            products.forEach(card => (card.style.display = "block"));
-            loadMoreBtn.remove();
-        });
-    });
+    }
 </script>
+
 </body>
 </html>

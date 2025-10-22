@@ -37,22 +37,10 @@
                     <span th:text="${#numbers.formatDecimal(product.donGia,0,'COMMA',0,'POINT')}">0</span>đ
                 </p>
 
-                <!-- ✅ Nút thêm vào giỏ hàng -->
-
-
-                   <!--cái này phải sưả lại -->
-<!--                <button type="button"-->
-<!--                        th:action="@{/checkout}" method="get"-->
-<!--                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}">-->
-<!--                   ➕ Mua hàng-->
-<!--                </button>-->
-
-                <button type="button"
-                        th:attr="data-id=${product.maSP}, data-name=${product.tenSP}"
-                        onclick="addToCart(this)">
-                    ➕ Thêm vào giỏ hàng
-                </button>
-
+                <!-- ✅ NEW BUTTON: Redirect to product detail -->
+                <a th:href="@{/product/{id}(id=${product.maSP})}">
+                    <button type="button">Xem chi tiết</button>
+                </a>
 
             </div>
         </div>
@@ -77,6 +65,7 @@
         </div>
     </div>
 </section>
+
 <!-- ======== SẢN PHẨM CỦA CHÚNG TÔI ======== -->
 <section>
     <h2>Sản phẩm của chúng tôi</h2>
@@ -95,6 +84,8 @@
                 <p class="price">
                     <span th:text="${#numbers.formatDecimal(product.donGia,0,'COMMA',0,'POINT')}">0</span>đ
                 </p>
+
+                <!-- ✅ Keep the “Mua ngay” link as before -->
                 <a th:href="@{/product/{id}(id=${product.maSP})}">
                     <button>Mua ngay</button>
                 </a>
@@ -102,6 +93,7 @@
         </div>
     </div>
 </section>
+
 <!-- ======== GIỚI THIỆU NHÓM ======== -->
 <section>
     <h2>Giới thiệu nhóm 5</h2>
@@ -116,54 +108,21 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
-<!-- ✅ LIMIT TO 5 PRODUCTS -->
+<!-- ✅ JS: Limit product count (unchanged) -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // 👇 Section 1: "Sản phẩm nổi bật" (show 5)
         const maxHot = 5;
         const hotProducts = document.querySelectorAll(".featured-hot .card");
         hotProducts.forEach((card, index) => {
             if (index >= maxHot) card.style.display = "none";
         });
 
-        // 👇 Section 2: "Sản phẩm của chúng tôi" (show 10)
         const maxAll = 10;
         const allProducts = document.querySelectorAll(".featured-all .card");
         allProducts.forEach((card, index) => {
             if (index >= maxAll) card.style.display = "none";
         });
     });
-    async function addToCart(button) {
-        const maSP = button.getAttribute("data-id");
-        const tenSP = button.getAttribute("data-name");
-
-        try {
-            const response = await fetch("/cart/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `maSP=${maSP}&soLuong=1`
-            });
-
-            if (response.status === 401) {
-                alert("⚠️ Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-                window.location.href = "/login";
-                return;
-            }
-
-            const data = await response.json();
-            if (data.success) {
-                alert(`✅ Đã thêm "${tenSP}" vào giỏ hàng!`);
-                const countEl = document.getElementById("cartCount");
-                if (countEl) countEl.textContent = data.totalItems; // cập nhật navbar
-            } else {
-                alert("❌ Có lỗi xảy ra khi thêm vào giỏ hàng!");
-            }
-        } catch (e) {
-            console.error("Lỗi:", e);
-            alert("❌ Không thể kết nối tới server!");
-        }
-    }
-
 </script>
 
 </body>
