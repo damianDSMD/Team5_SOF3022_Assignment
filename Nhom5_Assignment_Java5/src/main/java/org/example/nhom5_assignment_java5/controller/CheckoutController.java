@@ -60,8 +60,9 @@ public class CheckoutController {
         }
 
         // --- Kiểm tra địa chỉ ---
-        if ((form.getDiaChiId() == null || form.getDiaChiId().isEmpty())
-                && (form.getDiaChiText() == null || form.getDiaChiText().isEmpty())) {
+        if (form.getDiaChiId() == null
+                && (form.getDiaChiText() == null || form.getDiaChiText().trim().isEmpty())) {
+
             model.addAttribute("error", "Vui lòng chọn hoặc nhập địa chỉ giao hàng!");
             model.addAttribute("diachis", diaChiRepository.findAll());
             model.addAttribute("checkoutForm", form);
@@ -71,25 +72,16 @@ public class CheckoutController {
 
         DiaChi diaChiGiaoHang = null;
         if (form.getDiaChiText() != null && !form.getDiaChiText().isEmpty()) {
-            // ✅ Tự tạo mã DCxx mới
-            String maxId = diaChiRepository.findMaxMaDC();
-            String newId;
-            if (maxId == null) {
-                newId = "DC01";
-            } else {
-                int num = Integer.parseInt(maxId.replace("DC", ""));
-                newId = String.format("DC%02d", num + 1);
-            }
-
             diaChiGiaoHang = new DiaChi();
-            diaChiGiaoHang.setMaDC(newId);
             diaChiGiaoHang.setDiaChi(form.getDiaChiText());
             diaChiGiaoHang.setKhachHang(kh);
             diaChiGiaoHang.setMacDinh(false);
             diaChiRepository.save(diaChiGiaoHang);
-        } else if (form.getDiaChiId() != null && !form.getDiaChiId().isEmpty()) {
+        } else if (form.getDiaChiId() != null) {
             diaChiGiaoHang = diaChiRepository.findById(form.getDiaChiId()).orElse(null);
         }
+
+
 
         if (diaChiGiaoHang == null) {
             model.addAttribute("error", "Địa chỉ giao hàng không hợp lệ!");

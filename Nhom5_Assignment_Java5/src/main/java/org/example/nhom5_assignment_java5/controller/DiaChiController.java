@@ -21,7 +21,6 @@ public class DiaChiController {
     @Autowired
     private KhachHangService khachHangService;
 
-    // ✅ 1. Hiển thị danh sách địa chỉ của khách hàng hiện tại
     @GetMapping
     public String listAddresses(Model model) {
         KhachHang kh = khachHangService.getCurrentKhachHang();
@@ -36,17 +35,15 @@ public class DiaChiController {
 
         model.addAttribute("diachis", diaChiList);
         model.addAttribute("newDiaChi", new DiaChi());
-        return "diachi-list"; // 👉 file templates/diachi-list.html
+        return "diachi-list";
     }
 
-    // ✅ 2. Hiển thị form thêm địa chỉ mới
     @GetMapping("/them")
     public String showAddForm(Model model) {
         model.addAttribute("diaChi", new DiaChi());
-        return "diachi-form"; // 👉 file templates/diachi-form.html
+        return "diachi-form";
     }
 
-    // ✅ 3. Xử lý lưu địa chỉ mới
     @PostMapping("/save")
     public String saveAddress(@ModelAttribute("diaChi") DiaChi diaChi) {
         KhachHang kh = khachHangService.getCurrentKhachHang();
@@ -56,18 +53,15 @@ public class DiaChiController {
         diaChi.setKhachHang(kh);
         diaChi.setMacDinh(false);
         diaChiRepository.save(diaChi);
-
-        return "redirect:/diachi"; // quay lại danh sách địa chỉ
+        return "redirect:/diachi";
     }
 
-    // ✅ 4. Xóa địa chỉ
     @GetMapping("/xoa/{id}")
-    public String deleteAddress(@PathVariable("id") String id) {
+    public String deleteAddress(@PathVariable("id") Integer id) {
         diaChiRepository.deleteById(id);
         return "redirect:/diachi";
     }
 
-    // ✅ 5. Đặt địa chỉ làm mặc định
     @GetMapping("/macdinh/{id}")
     public String setDefault(@PathVariable("id") Integer id) {
         KhachHang kh = khachHangService.getCurrentKhachHang();
@@ -82,7 +76,6 @@ public class DiaChiController {
 
         for (DiaChi d : list) {
             d.setMacDinh(d.getMaDC().equals(id));
-
             diaChiRepository.save(d);
         }
 

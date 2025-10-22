@@ -5,14 +5,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "DiaChi")
 public class DiaChi {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto identity
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaDC")
-    private String maDC;
+    private Integer maDC;
 
     @ManyToOne
-    @JoinColumn(name = "MaKH", nullable = false)
+    @JoinColumn(name = "MaKH")
     private KhachHang khachHang;
 
     @Column(name = "DiaChi")
@@ -21,12 +20,12 @@ public class DiaChi {
     @Column(name = "MacDinh")
     private Boolean macDinh;
 
-    // Getters & setters
-    public String getMaDC() {
+    // ===== Getters & Setters =====
+    public Integer getMaDC() {
         return maDC;
     }
 
-    public void setMaDC(String maDC) {
+    public void setMaDC(Integer maDC) {
         this.maDC = maDC;
     }
 

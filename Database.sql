@@ -37,16 +37,18 @@ CREATE TABLE DiaChi (
 
 -- Create HoaDon table
 CREATE TABLE HoaDon (
-    MaHD VARCHAR(50) PRIMARY KEY,
+    MaHD INT IDENTITY(1,1) PRIMARY KEY,
     MaKH INT,
-    MaNV VARCHAR(50),
+    MaNV VARCHAR(50) NULL,
     MaDC INT,
     NgayTaoHD DATE,
     NgayUpHD DATE,
     MaGG VARCHAR(50),
     TongTien DECIMAL(15, 2),
     TrangThai VARCHAR(100),
-    FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH)
+	GhiChu NVARCHAR(255) NULL,
+    FOREIGN KEY (MaKH) REFERENCES KhachHang(MaKH),
+	FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNV)
 );
 
 -- Create SanPham table
@@ -63,7 +65,7 @@ CREATE TABLE HinhAnh (
     MaHA VARCHAR(50) PRIMARY KEY,
     MaSP VARCHAR(50),
     TenHA NVARCHAR(255),
-    FilePath VARCHAR(500),  -- Path to image file
+    FilePath VARCHAR(500),
     FOREIGN KEY (MaSP) REFERENCES SanPham(MaSP)
 );
 
@@ -92,7 +94,7 @@ CREATE TABLE GiamGia (
 
 -- Create HoaDonChiTiet table
 CREATE TABLE HoaDonChiTiet (
-    MaHD VARCHAR(50),
+    MaHD INT,
     MaSP VARCHAR(50),
     SL INT,
     TienSP DECIMAL(15, 2),
@@ -160,3 +162,7 @@ INSERT INTO KhachHang (TenKH, SDT, Email, Password, HangTV) VALUES
 select * from GioHang
 ALTER DATABASE Nhom5_Java5
 COLLATE Vietnamese_100_CI_AI_SC_UTF8;
+select * from DiaChi
+
+drop table HoaDonChiTiet
+drop table HoaDon

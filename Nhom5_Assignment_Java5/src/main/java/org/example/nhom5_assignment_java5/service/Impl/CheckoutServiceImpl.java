@@ -4,16 +4,13 @@ import jakarta.transaction.Transactional;
 import org.example.nhom5_assignment_java5.dto.CartItem;
 import org.example.nhom5_assignment_java5.dto.CheckoutForm;
 import org.example.nhom5_assignment_java5.entity.*;
-import org.example.nhom5_assignment_java5.repository.DiaChiRepository;
-import org.example.nhom5_assignment_java5.repository.HoaDonRepository;
-import org.example.nhom5_assignment_java5.repository.KhachHangRepository;
-import org.example.nhom5_assignment_java5.repository.SanPhamRepository;
+import org.example.nhom5_assignment_java5.repository.*;
 import org.example.nhom5_assignment_java5.service.CheckoutService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,35 +38,29 @@ public class CheckoutServiceImpl implements CheckoutService {
             throw new RuntimeException("Giỏ hàng rỗng");
         }
 
-        // ensure KhachHang persisted
-        KhachHang kh = khachHang;
-        if (kh != null && kh.getMaKH() != null) {
-            kh = khachHangRepository.findById(kh.getMaKH()).orElseThrow(() -> new RuntimeException("Khách không tồn tại"));
-        } else {
-            // if not logged in, create a minimal customer record (optional)
-            kh = khachHangRepository.save(kh);
-        }
+        KhachHang kh = khachHangRepository.findById(khachHang.getMaKH())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
 
         HoaDon hd = new HoaDon();
         hd.setKhachHang(kh);
 
-        // set DiaChi
+        // Địa chỉ giao hàng
+        DiaChi diaChi;
         if (form.getDiaChiId() != null) {
-            DiaChi d = diaChiRepository.findById(form.getDiaChiId())
+            diaChi = diaChiRepository.findById(form.getDiaChiId())
                     .orElseThrow(() -> new RuntimeException("Địa chỉ không tồn tại"));
-            hd.setDiaChi(d);
         } else {
-            // create transient DiaChi record if user entered text
             DiaChi newDc = new DiaChi();
             newDc.setKhachHang(kh);
             newDc.setDiaChi(form.getDiaChiText());
             newDc.setMacDinh(false);
-            DiaChi savedDc = diaChiRepository.save(newDc);
-            hd.setDiaChi(savedDc);
+            diaChi = diaChiRepository.save(newDc);
         }
+        hd.setDiaChi(diaChi);
 
-        hd.setNgayTao(LocalDateTime.now());
-        hd.setTrangThai("Chờ xác nhận");
+        hd.setNgayTaoHD(new Date());
+        hd.setNgayUpHD(new Date());
+        hd.setTrangThai("Pending");
         hd.setGhiChu(form.getGhiChu());
 
         List<HoaDonChiTiet> dsCT = new ArrayList<>();
@@ -78,31 +69,29 @@ public class CheckoutServiceImpl implements CheckoutService {
         for (CartItem item : form.getItems()) {
             SanPham sp = sanPhamRepository.findById(String.valueOf(item.getSanPhamId()))
                     .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại: " + item.getSanPhamId()));
+
             if (sp.getSoLuongTonKho() < item.getSoLuong()) {
-                throw new RuntimeException("Sản phẩm " + sp.getTenSP() + " không đủ số lượng. Tồn: " + sp.getSoLuongTonKho());
+                throw new RuntimeException("Sản phẩm " + sp.getTenSP() + " không đủ tồn kho");
             }
-            // tạo chi tiết
+
             HoaDonChiTiet ct = new HoaDonChiTiet();
             ct.setHoaDon(hd);
             ct.setSanPham(sp);
             ct.setSoLuong(item.getSoLuong());
             ct.setDonGia(sp.getDonGia());
             ct.setThanhTien(sp.getDonGia().multiply(BigDecimal.valueOf(item.getSoLuong())));
+
             dsCT.add(ct);
 
-            // trừ tồn kho
             sp.setSoLuongTonKho(sp.getSoLuongTonKho() - item.getSoLuong());
             sanPhamRepository.save(sp);
 
             total = total.add(ct.getThanhTien());
-
         }
 
-        hd.setTongTien(total.doubleValue());
+        hd.setTongTien(total);
         hd.setChiTiet(dsCT);
 
-        // save order (cascade sẽ lưu chi tiết)
-        HoaDon saved = hoaDonRepository.save(hd);
-        return saved;
+        return hoaDonRepository.save(hd);
     }
 }

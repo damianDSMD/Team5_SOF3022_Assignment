@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,39 +34,38 @@ public class AdminController {
         long productCount = sanPhamRepository.count();
         long orderCount = hoaDonRepository.count();
 
-        // total revenue (sum of tongTien, ignore nulls)
-        Double totalRevenue = hoaDonRepository.findAll().stream()
+        // ✅ Total revenue (sum of tongTien)
+        BigDecimal totalRevenue = hoaDonRepository.findAll().stream()
                 .map(HoaDon::getTongTien)
                 .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // recent 5 orders (by ngayTao if present; otherwise by id desc)
+        // ✅ Recent 5 orders (by NgayTaoHD or MaHD desc)
         List<HoaDon> recentOrders = hoaDonRepository.findAll().stream()
-                .sorted(Comparator.comparing((HoaDon h) -> Optional.ofNullable(h.getNgayTao()).orElse(null),
-                                Comparator.nullsLast(Comparator.naturalOrder())).reversed()
-                        .thenComparing((HoaDon h) -> Optional.ofNullable(h.getId()).orElse(Long.valueOf(0L)), Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(
+                                (HoaDon h) -> Optional.ofNullable(h.getNgayTaoHD()).orElse(new Date(0)),
+                                Comparator.nullsLast(Comparator.naturalOrder()))
+                        .reversed()
+                        .thenComparing((HoaDon h) -> Optional.ofNullable(h.getMaHD()).orElse(0), Comparator.reverseOrder()))
                 .limit(5)
                 .collect(Collectors.toList());
 
-        // recent 5 customers (by maKH desc)
+        // ✅ Recent 5 customers
         List<KhachHang> recentCustomers = khachHangRepository.findAll().stream()
                 .sorted(Comparator.comparing((KhachHang k) -> Optional.ofNullable(k.getMaKH()).orElse(0)).reversed())
                 .limit(5)
                 .collect(Collectors.toList());
 
-        // orders by status breakdown
+        // ✅ Orders by status
         Map<String, Long> ordersByStatus = hoaDonRepository.findAll().stream()
-                .collect(Collectors.groupingBy(h -> {
-                    String s = h.getTrangThai();
-                    return s == null ? "Chưa cập nhật" : s;
-                }, Collectors.counting()));
+                .collect(Collectors.groupingBy(
+                        h -> h.getTrangThai() == null ? "Chưa cập nhật" : h.getTrangThai(),
+                        Collectors.counting()
+                ));
 
-        // top 5 best selling products by quantity in HoaDonChiTiet (fallback: by available product count if no details)
-        // For safety we attempt to compute from HoaDonChiTiet if mapped; otherwise show top products by id desc.
+        // ✅ Top 5 best-selling products
         Map<String, Long> topProducts = new LinkedHashMap<>();
         try {
-            // attempt: collect by SanPham name from HoaDonChiTiet via HoaDon -> chiTiet (if present)
             Map<String, Long> counts = new HashMap<>();
             hoaDonRepository.findAll().forEach(h -> {
                 if (h.getChiTiet() != null) {
@@ -83,7 +83,6 @@ public class AdminController {
                     .limit(5)
                     .forEach(e -> topProducts.put(e.getKey(), e.getValue()));
         } catch (Exception ignored) {
-            // fallback
             sanPhamRepository.findAll().stream()
                     .sorted(Comparator.comparing(p -> Optional.ofNullable(p.getMaSP()).orElse("0"), Comparator.reverseOrder()))
                     .limit(5)
