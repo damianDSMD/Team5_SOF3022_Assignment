@@ -155,6 +155,6 @@ INSERT INTO HinhAnh (MaHA, MaSP, TenHA, FilePath) VALUES
 INSERT INTO KhachHang (TenKH, SDT, Email, Password, HangTV) VALUES
 ('Nguyễn Văn A', '0901234567', 'a@example.com', '123456', 'Bronze')
 
-select * from KhachHang
+select * from GioHang
 ALTER DATABASE Nhom5_Java5
 COLLATE Vietnamese_100_CI_AI_SC_UTF8;

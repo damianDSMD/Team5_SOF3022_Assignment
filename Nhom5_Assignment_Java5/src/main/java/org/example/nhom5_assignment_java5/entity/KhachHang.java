@@ -12,7 +12,7 @@ public class KhachHang {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaKH")
+    @Column(name = "MaKH")  // ✅ Phải trùng với DB và @JoinColumn
     private Integer maKH;
 
     @Column(name = "TenKH", nullable = false)
@@ -28,5 +28,5 @@ public class KhachHang {
     private String password;
 
     @Column(name = "HangTV")
-    private String hangTV = "Bronze"; // mặc định
+    private String hangTV = "Bronze";
 }

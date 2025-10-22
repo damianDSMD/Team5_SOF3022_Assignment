@@ -52,11 +52,31 @@ public class GioHangService {
                 .sum();
     }
 
+    // ✅ Tính tổng tiền giỏ hàng (sử dụng double)
+    public double getTongTien(KhachHang kh) {
+        List<GioHang> gioHangList = gioHangRepository.findByKhachHang(kh);
+        double tongTien = 0.0;
+
+        for (GioHang gh : gioHangList) {
+            if (gh.getSanPham() != null && gh.getSanPham().getDonGia() != null) {
+                double donGia = gh.getSanPham().getDonGia().doubleValue();
+                tongTien += donGia * gh.getSoLuong();
+            }
+        }
+
+        return tongTien;
+    }
+
     // ✅ Cập nhật số lượng
     public void updateSoLuong(Integer maGH, int soLuong) {
         GioHang gh = gioHangRepository.findById(maGH).orElseThrow();
-        gh.setSoLuong(soLuong);
-        gioHangRepository.save(gh);
+        if (soLuong <= 0) {
+            // Nếu số lượng <= 0 thì xóa luôn sản phẩm
+            gioHangRepository.delete(gh);
+        } else {
+            gh.setSoLuong(soLuong);
+            gioHangRepository.save(gh);
+        }
     }
 
     // ✅ Xóa 1 sản phẩm khỏi giỏ
@@ -68,5 +88,11 @@ public class GioHangService {
     public void clearCart(KhachHang kh) {
         List<GioHang> gioHangList = gioHangRepository.findByKhachHang(kh);
         gioHangRepository.deleteAll(gioHangList);
+    }
+
+    // ✅ Xử lý mua hàng (checkout)
+    public void checkout(KhachHang kh) {
+        // 🚀 Sau này bạn có thể thêm logic tạo hóa đơn tại đây
+        clearCart(kh); // Tạm thời chỉ xóa giỏ sau khi mua
     }
 }

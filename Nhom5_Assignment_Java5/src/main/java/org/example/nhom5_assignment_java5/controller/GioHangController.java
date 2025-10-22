@@ -28,14 +28,14 @@ public class GioHangController {
     @GetMapping
     public String viewCart(Model model) {
         KhachHang kh = khachHangService.getCurrentKhachHang();
-
         if (kh == null) {
-            // Nếu chưa login → chuyển hướng sang trang đăng nhập
             return "redirect:/login";
         }
 
         List<GioHang> gioHangList = gioHangService.getGioHangByKhachHang(kh);
         model.addAttribute("gioHangList", gioHangList);
+        model.addAttribute("tongTien", gioHangService.getTongTien(kh));
+
         return "cart";
     }
 
@@ -68,30 +68,31 @@ public class GioHangController {
 
         return ResponseEntity.ok(response);
     }
-
+    // cập nhật số lượng giỏ hàng
     @PostMapping("/update")
-    public String updateQuantity(
-            @RequestParam Integer maGH,
-            @RequestParam Integer soLuong
-
-    ) {
-
+    public String updateSoLuong(@RequestParam("maGH") Integer maGH,
+                                @RequestParam("soLuong") Integer soLuong) {
         gioHangService.updateSoLuong(maGH, soLuong);
-        return "redirect:/giohang";
+        return "redirect:/cart";
     }
+
 
     // ✅ Xóa 1 sản phẩm rồi load lại trang giỏ hàng
-    @PostMapping("/remove/{id}")
+    @GetMapping("/remove/{id}")
     public String removeItem(@PathVariable("id") Integer id) {
         gioHangService.removeItem(id);
-        return "redirect:/giohang"; // quay lại trang giỏ hàng
+        return "redirect:/cart"; // đổi lại đường dẫn redirect cho khớp
     }
 
+
+
     // ✅ Xóa toàn bộ giỏ hàng rồi load lại trang giỏ hàng
-    @PostMapping("/clear")
+    @GetMapping("/clear")
     public String clearCart() {
         KhachHang kh = khachHangService.getCurrentKhachHang();
-        gioHangService.clearCart(kh);
-        return "redirect:/giohang";
+        if (kh != null) {
+            gioHangService.clearCart(kh);
+        }
+        return "redirect:/cart";
     }
 }
