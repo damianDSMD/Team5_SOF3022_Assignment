@@ -9,9 +9,9 @@
     <h2>🎉 Đặt hàng thành công!</h2>
 
     <p>Mã đơn hàng: <strong th:text="${hoaDon.maHD}"></strong></p>
-    <p>Tổng tiền: <strong th:text="${hoaDon.tongTien}"></strong> VND</p>
+    <p>Tổng tiền: <strong th:text="${#numbers.formatDecimal(hoaDon.tongTien, 0, 'COMMA', 2, 'POINT')} + ' VND'"></strong></p>
     <p>Trạng thái: <strong th:text="${hoaDon.trangThai}"></strong></p>
-    <p>Ngày đặt: <strong th:text="${#temporals.format(hoaDon.ngayTao, 'dd/MM/yyyy HH:mm')}"></strong></p>
+    <p>Ngày đặt: <strong th:text="${#dates.format(hoaDon.ngayTaoHD, 'dd/MM/yyyy HH:mm')}"></strong></p>
     <p>Địa chỉ giao: <strong th:text="${hoaDon.diaChi.diaChi}"></strong></p>
 
     <a th:href="@{/}" style="display:inline-block;margin-top:15px;">← Quay về trang chủ</a>
