@@ -12,9 +12,10 @@
     </th:block>
 
     <th:block th:if="${session.khachHang != null}">
-        <span style="color:white; margin-left:20px;">
-            Xin chào, <strong th:text="${session.khachHang.tenKH}">User</strong>!
-        </span>
         <a th:href="@{/logout}" style="margin-left:10px; color:#fff;">Đăng xuất</a>
+        <a th:href="@{/profile}"
+           style="color:white; text-decoration:none; font-weight:bold; margin-left:15px;">
+            👤 <span th:text="${session.khachHang.tenKH}">Tên người dùng</span>
+        </a>
     </th:block>
 </nav>

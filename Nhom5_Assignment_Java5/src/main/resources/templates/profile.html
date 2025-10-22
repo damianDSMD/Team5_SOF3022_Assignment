@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin cá nhân</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .profile-container {
+            width: 80%;
+            margin: 40px auto;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .form-section, .password-section {
+            flex: 1;
+        }
+
+        h2 {
+            color: #00e6b8;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #00ffc3;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #00d4a2;
+        }
+
+        /* 🔔 Thông báo nổi giữa màn hình */
+        .alert {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 350px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 9999;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert.success {
+            background-color: #00b894;
+            color: #fff;
+        }
+
+        .alert.error {
+            background-color: #d63031;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translate(-50%, 0); }
+            to { opacity: 0; transform: translate(-50%, -20px); }
+        }
+
+        /* 👁️ Biểu tượng con mắt trong input */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ccc;
+            font-size: 18px;
+            user-select: none;
+        }
+
+        .toggle-password:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ✅ Thông báo nổi giữa trang -->
+<div id="alertBox" class="alert"></div>
+
+<div class="profile-container">
+    <!-- Thông tin cá nhân -->
+    <div class="form-section">
+        <h2>Thông tin cá nhân</h2>
+
+        <form id="updateForm" th:action="@{/profile/update}" method="post">
+            <label>Tên khách hàng:</label>
+            <input type="text" name="tenKH" id="tenKH" th:value="${khachHang.tenKH}" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" id="email" th:value="${khachHang.email}" required>
+
+            <label>Số điện thoại:</label>
+            <input type="text" name="sdt" id="sdt" th:value="${khachHang.sdt}" required>
+
+            <button type="submit" class="btn">✏️ Cập nhật thông tin</button>
+        </form>
+    </div>
+
+    <!-- Đổi mật khẩu -->
+    <div class="password-section">
+        <h3>🔑 Đổi mật khẩu</h3>
+        <form id="passwordForm" th:action="@{/profile/change-password}" method="post">
+            <label>Mật khẩu cũ:</label>
+            <div class="password-wrapper">
+                <input type="password" id="oldPassword" name="oldPassword" placeholder="••••••••" required>
+                <span class="toggle-password" onclick="togglePassword('oldPassword', this)">👁️</span>
+            </div>
+
+            <label>Mật khẩu mới:</label>
+            <div class="password-wrapper">
+                <input type="password" id="newPassword" name="newPassword" placeholder="••••••••" required>
+                <span class="toggle-password" onclick="togglePassword('newPassword', this)">👁️</span>
+            </div>
+
+            <label>Xác nhận mật khẩu mới:</label>
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+                <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">👁️</span>
+            </div>
+
+            <button type="submit" class="btn">🔒 Đổi mật khẩu</button>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const alertBox = document.getElementById("alertBox");
+
+    function showAlert(message, type) {
+        alertBox.textContent = message;
+        alertBox.className = "alert " + type;
+        alertBox.style.display = "block";
+        alertBox.style.animation = "fadeIn 0.3s ease";
+
+        setTimeout(() => {
+            alertBox.style.animation = "fadeOut 0.5s ease";
+            setTimeout(() => { alertBox.style.display = "none"; }, 500);
+        }, 2500);
+    }
+
+    /* ✅ Nhận thông báo từ server */
+    const successPass = /*[[${successPass}]]*/ null;
+    const errorPass = /*[[${errorPass}]]*/ null;
+    const success = /*[[${success}]]*/ null;
+    const error = /*[[${error}]]*/ null;
+
+    if (successPass) showAlert(successPass, "success");
+    if (errorPass) showAlert(errorPass, "error");
+    if (success) showAlert(success, "success");
+    if (error) showAlert(error, "error");
+
+    // ✅ Validate cập nhật thông tin
+    document.getElementById("updateForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const sdt = document.getElementById("sdt").value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{10,}$/;
+
+        if (!emailRegex.test(email)) {
+            showAlert("❌ Email không hợp lệ. Vui lòng nhập đúng định dạng!", "error");
+            return;
+        }
+
+        if (!phoneRegex.test(sdt)) {
+            showAlert("❌ Số điện thoại phải là số và có ít nhất 10 chữ số.", "error");
+            return;
+        }
+
+        this.submit();
+    });
+
+    // ✅ Validate đổi mật khẩu
+    document.getElementById("passwordForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const newPass = document.getElementById("newPassword").value;
+        const confirmPass = document.getElementById("confirmPassword").value;
+
+        if (newPass.length < 6) {
+            showAlert("❌ Mật khẩu mới phải có ít nhất 6 ký tự!", "error");
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            showAlert("❌ Xác nhận mật khẩu không khớp!", "error");
+            return;
+        }
+
+        this.submit();
+    });
+
+    // 👁️ Toggle hiển thị mật khẩu
+    function togglePassword(inputId, icon) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "🙈";
+        } else {
+            input.type = "password";
+            icon.textContent = "👁️";
+        }
+    }
+</script>
+
+</body>
+</html>
