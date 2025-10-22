@@ -4,119 +4,217 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard • Bài mới</title>
-  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="/css/style (2).css" />
+
   <style>
-    /* light local layout helpers */
     :root { --gap: 16px; }
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:#0f1724; color:#e6eef8; }
-    .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; background: rgba(255,255,255,0.02); backdrop-filter: blur(6px); position: sticky; top:0; z-index:20; }
+    body { display: grid; grid-template-rows: 60px 1fr; min-height: 100vh; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:0 16px; border-bottom:1px solid rgba(255,255,255,.08); backdrop-filter: blur(8px); position: sticky; top:0; z-index:20; }
+    .brand { display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing: .5px; }
+    .brand .dot { width:10px; height:10px; border-radius:999px; background:#b76cf6; box-shadow:0 0 12px #b76cf6aa; }
     .layout { display:grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 60px); }
-    .sidebar { padding:18px; border-right: 1px solid rgba(255,255,255,.04); background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
-    .content { padding:20px; }
-    .card { background: rgba(255,255,255,0.02); padding:14px; border-radius:12px; box-shadow: 0 4px 18px rgba(0,0,0,0.5); }
-    .grid { display:grid; gap:16px; grid-template-columns: repeat(3, 1fr); margin-bottom:20px; }
-    table { width:100%; border-collapse: collapse; }
-    table th, table td { text-align:left; padding:8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .muted { color: #9aa7bf; font-size:0.9rem; }
+    .sidebar { border-right:1px solid rgba(255,255,255,.08); padding:16px; position: sticky; top:60px; height: calc(100vh - 60px); overflow:auto; }
+    .sidegroup { margin-bottom:18px; }
+    .sidegroup h4 { opacity:.8; font-size:12px; margin-bottom:8px; text-transform:uppercase; letter-spacing:.8px; }
+    .sidelink { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; cursor:pointer; }
+    .sidelink.active { outline:1px solid rgba(183,108,246,.45); background:rgba(183,108,246,.10); }
+    main { padding:20px; }
+    .section { display:none; }
+    .section.active { display:block; }
+    .grid { display:grid; gap: var(--gap); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .flex { display:flex; gap:10px; align-items:center; }
+    .between { justify-content:space-between; }
+    .status { padding: 4px 10px; border-radius: 999px; font-size: 12px; white-space:nowrap; }
+    .status.success { background: rgba(46, 204, 113, .18); color: #2ecc71; border: 1px solid rgba(46,204,113,.35); }
+    .status.warn    { background: rgba(241, 196, 15, .18); color: #f1c40f; border: 1px solid rgba(241,196,15,.35); }
+    .status.danger  { background: rgba(231, 76, 60, .18); color: #e74c3c; border: 1px solid rgba(231,76,60,.35); }
+    .toolbar { display:flex; gap:10px; flex-wrap:wrap; margin: 8px 0 14px; }
+    .fade-pop { animation: fadepop .32s ease; }
+    @keyframes fadepop { from{opacity:0; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
+    @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .layout { grid-template-columns: 72px 1fr; } .sidebar .txt { display:none; } }
+    @media (max-width: 640px)  { .grid-4 { grid-template-columns: 1fr; } }
   </style>
 </head>
+
 <body>
-<div class="topbar">
-  <div class="brand"><span style="width:10px;height:10px;border-radius:99px;background:#b76cf6;margin-right:8px;display:inline-block;"></span><strong>Admin</strong></div>
-  <div class="top-actions muted">Xin chào, Admin</div>
-</div>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>.brq Admin</span>
+  </div>
+  <div class="top-actions">
+    <input id="global-search" type="text" placeholder="Tìm nhanh trong bảng..." />
+    <button id="refresh" onclick="location.reload()">Làm mới</button>
+  </div>
+</header>
 
 <div class="layout">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <nav>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
-        <li><a th:href="@{/admin}" style="color:inherit;text-decoration:none;">Dashboard</a></li>
-        <li><a th:href="@{/admin/customers}" style="color:inherit;text-decoration:none;">Khách hàng</a></li>
-        <li><a th:href="@{/admin/products}" style="color:inherit;text-decoration:none;">Sản phẩm</a></li>
-        <li><a th:href="@{/admin/orders}" style="color:inherit;text-decoration:none;">Đơn hàng</a></li>
-      </ul>
-    </nav>
+    <div class="sidegroup">
+      <h4>Điều hướng</h4>
+      <div class="sidelink active" data-tab="overview"><span class="txt">Quản lý</span></div>
+      <div class="sidelink" data-tab="hr"><span class="txt">Nhân sự</span></div>
+      <div class="sidelink" data-tab="inventory"><span class="txt">Kho hàng</span></div>
+      <div class="sidelink" data-tab="orders"><span class="txt">Duyệt/Hủy đơn</span></div>
+    </div>
   </aside>
 
-  <main class="content">
-    <div class="grid">
-      <div class="card">
-        <div class="muted">Khách hàng</div>
-        <h2 th:text="${customerCount}">0</h2>
+  <!-- CONTENT -->
+  <main>
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="section active fade-pop">
+      <div class="flex between">
+        <h2>Tổng quan</h2>
       </div>
-      <div class="card">
-        <div class="muted">Sản phẩm</div>
-        <h2 th:text="${productCount}">0</h2>
-      </div>
-      <div class="card">
-        <div class="muted">Đơn hàng</div>
-        <h2 th:text="${orderCount}">0</h2>
-      </div>
-    </div>
 
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
-      <section class="card">
-        <h3 style="margin-top:0">Đơn hàng gần đây</h3>
+      <div class="grid grid-4">
+        <div class="card fade-pop">
+          <div class="card-body">
+            <h3>Doanh thu hôm nay</h3>
+            <p class="price" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 2, 'POINT')} + 'đ'">3.250.000đ</p>
+            <span class="status success">+8.2% so với hôm qua</span>
+          </div>
+        </div>
+        <div class="card fade-pop">
+          <div class="card-body">
+            <h3>Đơn chờ duyệt</h3>
+            <p class="price" th:text="${pendingCount}">12</p>
+            <span class="status warn">Cần xử lý</span>
+          </div>
+        </div>
+        <div class="card fade-pop">
+          <div class="card-body">
+            <h3>Sản phẩm sắp hết</h3>
+            <p class="price" th:text="${lowStockCount}">5</p>
+            <span class="status danger">Kiểm tra kho</span>
+          </div>
+        </div>
+        <div class="card fade-pop">
+          <div class="card-body">
+            <h3>Nhân sự đang online</h3>
+            <p class="price" th:text="${staffOnline}">7</p>
+            <span class="status success">Ổn định</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:22px">
+        <h3>Nhật ký hoạt động gần đây</h3>
         <table>
           <thead>
-          <tr><th>Mã</th><th>Khách hàng</th><th>Ngày</th><th>Tổng tiền</th><th>Trạng thái</th></tr>
+          <tr>
+            <th>Mã HD</th>
+            <th>Khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+          </tr>
           </thead>
           <tbody>
-          <tr th:each="o : ${recentOrders}">
-            <td th:text="${o.id}">1</td>
-            <td th:text="${o.khachHang != null ? o.khachHang.tenKH : '—'}">Nguyễn A</td>
-            <td th:text="${o.ngayTao != null ? #dates.format(o.ngayTao, 'dd/MM/yyyy HH:mm') : '—'}">01/01/2025</td>
-            <td th:text="${o.tongTien != null ? #numbers.formatDecimal(o.tongTien, 0, 'COMMA', 2, 'POINT') : '0'}">0</td>
-            <td th:text="${o.trangThai}">Chờ xác nhận</td>
+          <tr th:each="hd : ${recentOrders}">
+            <td th:text="${hd.maHD}">HD001</td>
+            <td th:text="${hd.khachHang.tenKH}">Nguyễn Văn A</td>
+            <td th:text="${#numbers.formatDecimal(hd.tongTien, 0, 'COMMA', 2, 'POINT')} + 'đ'">1,250,000đ</td>
+            <td th:text="${#dates.format(hd.ngayTaoHD, 'dd/MM/yyyy')}">20/10/2025</td>
+            <td><span th:text="${hd.trangThai}" class="status success">Hoàn tất</span></td>
           </tr>
-          <tr th:if="${#lists.isEmpty(recentOrders)}"><td colspan="5" class="muted">Không có đơn hàng</td></tr>
           </tbody>
         </table>
-      </section>
+      </div>
+    </section>
 
-      <aside class="card">
-        <h4 style="margin-top:0">Tổng doanh thu</h4>
-        <div style="font-size:1.6rem;font-weight:700" th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',2,'POINT')}">0</div>
-
-        <hr style="border-color: rgba(255,255,255,0.03); margin:12px 0">
-
-        <h5>Trạng thái đơn</h5>
-        <ul style="padding-left:0;list-style:none">
-          <li th:each="e : ${ordersByStatus}">
-            <span th:text="${e.key}">Trạng thái</span>
-            <span style="float:right" th:text="${e.value}">0</span>
-          </li>
-        </ul>
-
-        <hr style="border-color: rgba(255,255,255,0.03); margin:12px 0">
-
-        <h5>Top sản phẩm</h5>
-        <ul style="padding-left:0;list-style:none">
-          <li th:each="p : ${topProducts}">
-            <span th:text="${p.key}">Sản phẩm</span>
-            <span style="float:right" th:text="${p.value}">0</span>
-          </li>
-          <li th:if="${#maps.isEmpty(topProducts)}" class="muted">Không có dữ liệu</li>
-        </ul>
-      </aside>
-    </div>
-
-    <div style="margin-top:18px" class="card">
-      <h4 style="margin-top:0">Khách hàng mới</h4>
+    <!-- HR -->
+    <section id="tab-hr" class="section fade-pop">
+      <h2>Quản lý nhân sự</h2>
       <table>
-        <thead><tr><th>Mã</th><th>Tên</th><th>SĐT</th><th>Email</th></tr></thead>
-        <tbody>
-        <tr th:each="c : ${recentCustomers}">
-          <td th:text="${c.maKH}">1</td>
-          <td th:text="${c.tenKH}">Nguyễn A</td>
-          <td th:text="${c.sdt}">0123456789</td>
-          <td th:text="${c.email}">a@example.com</td>
+        <thead>
+        <tr>
+          <th>Mã NV</th>
+          <th>Họ tên</th>
+          <th>Chức vụ</th>
+          <th>Trạng thái</th>
         </tr>
-        <tr th:if="${#lists.isEmpty(recentCustomers)}"><td colspan="4" class="muted">Không có khách hàng</td></tr>
+        </thead>
+        <tbody>
+        <tr th:each="nv : ${staffList}">
+          <td th:text="${nv.maNV}">NV001</td>
+          <td th:text="${nv.tenNV}">Nguyễn Văn A</td>
+          <td th:text="${nv.chucVu}">Kho</td>
+          <td><span class="status success" th:text="${nv.trangThai}">Đang làm</span></td>
+        </tr>
         </tbody>
       </table>
-    </div>
+    </section>
+
+    <!-- INVENTORY -->
+    <section id="tab-inventory" class="section fade-pop">
+      <h2>Kho hàng</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Mã SP</th>
+          <th>Tên sản phẩm</th>
+          <th>Tồn kho</th>
+          <th>Giá</th>
+          <th>Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sp : ${productList}">
+          <td th:text="${sp.maSP}">M365</td>
+          <td th:text="${sp.tenSP}">Microsoft 365 Personal</td>
+          <td th:text="${sp.soLuongTonKho}">3</td>
+          <td th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 2, 'POINT')} + 'đ'">200.000đ</td>
+          <td>
+                <span class="status" th:classappend="${sp.soLuongTonKho <= 5 ? 'warn' : 'success'}"
+                      th:text="${sp.soLuongTonKho <= 5 ? 'Sắp hết' : 'Còn hàng'}"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="tab-orders" class="section fade-pop">
+      <h2>Duyệt đơn / Hủy đơn</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Mã HD</th>
+          <th>Khách hàng</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hd : ${pendingOrders}">
+          <td th:text="${hd.maHD}">A1029</td>
+          <td th:text="${hd.khachHang.tenKH}">Nguyễn Văn B</td>
+          <td th:text="${#numbers.formatDecimal(hd.tongTien, 0, 'COMMA', 2, 'POINT')} + 'đ'">500,000đ</td>
+          <td><span class="status warn" th:text="${hd.trangThai}">Chờ duyệt</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
   </main>
 </div>
+
+<script>
+  const tabLinks = document.querySelectorAll('.sidelink');
+  const sections = document.querySelectorAll('.section');
+
+  function showTab(key) {
+    sections.forEach(s => s.classList.remove('active'));
+    document.querySelector(`#tab-${key}`).classList.add('active');
+    tabLinks.forEach(l => l.classList.toggle('active', l.dataset.tab === key));
+  }
+
+  tabLinks.forEach(l => l.addEventListener('click', () => showTab(l.dataset.tab)));
+</script>
 </body>
 </html>

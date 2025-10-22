@@ -1,37 +1,30 @@
 package org.example.nhom5_assignment_java5.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "NhanVien")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class NhanVien {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
-    private Integer id;
-
-    @Column(name = "MaNV", unique = true, length = 50)
+    @Column(name = "MaNV")
     private String maNV;
 
-    @Column(name = "TenNV", nullable = false, length = 255)
+    @Column(name = "TenNV")
     private String tenNV;
 
-    @Column(name = "SDT", length = 20)
-    private String sdt;
-
-    @Column(name = "Email", length = 255)
-    private String email;
-
-    @Column(name = "ChucVu", length = 100)
+    @Column(name = "ChucVu")
     private String chucVu;
 
-    @Column(name = "Password", length = 255)
+    @Column(name = "Email")
+    private String email;
+
+    @Column(name = "Password")
     private String password;
+
+    @Column(name = "SDT")
+    private String sdt;
 }
