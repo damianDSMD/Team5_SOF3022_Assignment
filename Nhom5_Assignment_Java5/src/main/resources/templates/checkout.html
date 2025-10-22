@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Giao diện đơn giản, rõ ràng */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #007bff;
+        }
+
+        .panel {
+            border: 1px solid #ddd;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+        }
+
+        table {
+            width:100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding:10px;
+            border-bottom:1px solid #eee;
+            text-align:left;
+        }
+
+        .total {
+            text-align:right;
+            font-weight:bold;
+            font-size:1.2em;
+            color:#d63384;
+        }
+
+        .btn {
+            padding:10px 18px;
+            border:none;
+            background:#007bff;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background:#0056b3;
+        }
+
+        textarea, input, select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Thanh toán</h2>
+
+    <!-- Thông báo lỗi -->
+    <div th:if="${error}" style="color:red; margin-bottom:12px;" th:text="${error}"></div>
+
+    <form th:action="@{/checkout/confirm}" th:object="${checkoutForm}" method="post">
+
+
+    <!-- Panel địa chỉ -->
+        <div class="panel">
+            <h3>Địa chỉ giao hàng</h3>
+
+            <div>
+                <label>Chọn địa chỉ đã lưu:</label>
+                <select th:field="*{diaChiId}">
+                    <option value="">-- Chọn địa chỉ --</option>
+                    <option th:each="d : ${diachis}" th:value="${d.maDC}" th:text="${d.diaChi}"></option>
+                </select>
+            </div>
+
+            <div style="margin-top:8px;">
+                <label>Hoặc nhập địa chỉ mới:</label>
+                <input type="text" th:field="*{diaChiText}" placeholder="Nhập địa chỉ nhận hàng">
+            </div>
+        </div>
+
+        <!-- Panel giỏ hàng -->
+        <div class="panel">
+            <h3>Giỏ hàng</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${cart}">
+                    <td th:text="${c.sanPham.tenSP}">Tên SP</td>
+                    <td th:text="${c.soLuong}">1</td>
+                    <td th:text="${#numbers.formatDecimal(c.sanPham.donGia, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</td>
+                    <td th:text="${#numbers.formatDecimal(c.soLuong * c.sanPham.donGia, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="total" style="margin-top:12px;">
+                Tổng tạm tính:
+                <span th:text="${#numbers.formatDecimal(tongTien, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</span>
+            </div>
+        </div>
+
+        <!-- Panel ghi chú -->
+        <div class="panel">
+            <label>Ghi chú cho người bán</label>
+            <textarea th:field="*{ghiChu}" rows="3" placeholder="Nhập ghi chú nếu có..."></textarea>
+        </div>
+
+        <!-- Nút xác nhận -->
+        <div style="text-align:right;">
+            <button type="submit" class="btn">Xác nhận đặt hàng (COD)</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

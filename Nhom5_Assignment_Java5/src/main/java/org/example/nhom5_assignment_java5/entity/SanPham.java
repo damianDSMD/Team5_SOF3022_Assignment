@@ -30,6 +30,7 @@ public class SanPham {
     @Column(name = "MaLoai", length = 50)
     private String maLoai;
 
+
     @OneToMany(mappedBy = "sanPham", fetch = FetchType.EAGER)
     private List<HinhAnh> hinhAnhs;
 }

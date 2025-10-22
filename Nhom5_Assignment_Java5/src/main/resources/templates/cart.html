@@ -23,23 +23,39 @@
         <tr th:each="item : ${gioHangList}">
             <td th:text="${item.sanPham.tenSP}"></td>
             <td>
-                <form th:action="@{/giohang/update}" method="post" class="update-form">
+                <form th:action="@{/cart/update}" method="post" class="update-form">
                     <input type="hidden" name="maGH" th:value="${item.maGH}">
                     <input type="number" name="soLuong" min="1" th:value="${item.soLuong}">
                     <button type="submit">Cập nhật</button>
                 </form>
             </td>
+
             <td th:text="${#numbers.formatDecimal(item.sanPham.donGia, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
             <td th:text="${#numbers.formatDecimal(item.sanPham.donGia * item.soLuong, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
-            <td><a th:href="@{'/giohang/remove/' + ${item.maGH}}" class="btn-delete">Xóa</a></td>
+            <td><a th:href="@{/cart/remove/{id}(id=${item.maGH})}" class="btn-delete">Xóa</a></td>
         </tr>
         </tbody>
     </table>
 
     <div class="actions">
-        <a href="/api/giohang/clear" class="btn-clear">🗑 Xóa toàn bộ giỏ</a>
-        <a href="/api/home" class="btn-back">⬅ Quay lại trang mua hàng</a>
+        <a th:href="@{/cart/clear}" class="btn-clear">🗑 Xóa toàn bộ giỏ</a>
+
+        <a th:href="@{/home}" class="btn-back">⬅ Quay lại trang mua hàng</a>
+
     </div>
+    <div class="cart-summary" style="margin-top: 20px; text-align: right;">
+        <h3>
+            Tổng tiền:
+            <span th:text="${#numbers.formatDecimal(tongTien, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+        </h3>
+
+        <form th:action="@{/checkout}" method="get">
+            <button type="submit" class="btn btn-success">Mua hàng</button>
+        </form>
+
+
+    </div>
+
 
 </div>
 </body>
