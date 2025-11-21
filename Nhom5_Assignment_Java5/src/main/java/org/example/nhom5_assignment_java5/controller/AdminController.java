@@ -27,28 +27,19 @@ public class AdminController {
     @Autowired
     private NhanVienRepository nhanVienRepository;
 
-    // =============================== //
-    // 🟣 MAIN DASHBOARD ENTRY POINT
-    // =============================== //
     @GetMapping("/admin")
     public String dashboard(Model model) {
 
-        // ✅ 1. Tổng số khách hàng
         long customerCount = khachHangRepository.count();
 
-        // ✅ 2. Tổng số sản phẩm
         long productCount = sanPhamRepository.count();
 
-        // ✅ 3. Tổng số đơn hàng
         long orderCount = hoaDonRepository.count();
 
-        // ✅ 4. Tổng doanh thu (sum của tất cả đơn hàng đã hoàn tất hoặc có tổng tiền)
         BigDecimal totalRevenue = hoaDonRepository.findAll().stream()
                 .map(HoaDon::getTongTien)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // ✅ 5. Đơn hàng gần đây (sắp xếp theo ngày tạo hoặc mã giảm dần)
         List<HoaDon> recentOrders = hoaDonRepository.findAll().stream()
                 .sorted(Comparator.comparing(
                                 (HoaDon h) -> Optional.ofNullable(h.getNgayTaoHD()).orElse(new Date(0)),
@@ -57,8 +48,6 @@ public class AdminController {
                         .thenComparing((HoaDon h) -> Optional.ofNullable(h.getMaHD()).orElse(0), Comparator.reverseOrder()))
                 .limit(10)
                 .collect(Collectors.toList());
-
-        // ✅ 6. Khách hàng gần đây (5 khách hàng mới nhất)
         List<KhachHang> recentCustomers = khachHangRepository.findAll().stream()
                 .sorted(Comparator.comparing((KhachHang k) -> Optional.ofNullable(k.getMaKH()).orElse(0)).reversed())
                 .limit(10)

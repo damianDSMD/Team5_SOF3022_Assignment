@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.nhom5_assignment_java5.entity.KhachHang;
 import org.example.nhom5_assignment_java5.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,17 @@ public class AuthController {
     @Autowired
     private KhachHangService service;
 
-    // ✅ Hiển thị form đăng ký
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // ✅ Register page
     @GetMapping("/register")
     public String showForm(Model model) {
         model.addAttribute("khachHang", new KhachHang());
         return "register";
     }
 
-    // ✅ Xử lý đăng ký người dùng
+    // ✅ Handle register
     @PostMapping("/register")
     public String register(
             @ModelAttribute("khachHang") KhachHang kh,
@@ -34,50 +38,41 @@ public class AuthController {
             return "register";
         }
 
-        // Gán mặc định hạng thành viên là "browze"
+        // Mã hoá mật khẩu bằng BCrypt
+        kh.setPassword(passwordEncoder.encode(kh.getPassword()));
+
+        // Gán mặc định hạng thành viên
         kh.setHangTV("browze");
 
-        // Gọi service đăng ký
+        // Gọi service để lưu
         String result = service.dangKy(kh);
+
         if (!result.equals("Đăng ký thành công!")) {
             model.addAttribute("error", result);
             return "register";
         }
 
-        // Nếu thành công → hiển thị thông báo và chuyển hướng đến login
         model.addAttribute("message", "Đăng ký thành công! Hãy đăng nhập.");
         return "login";
     }
 
-    // ✅ Hiển thị form đăng nhập
+    // ✅ Login page (Spring Security handles authentication)
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(@RequestParam(value = "error", required = false) String error,
+                                Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Email hoặc mật khẩu không đúng!");
+        }
         return "login";
     }
 
-    // ✅ Xử lý đăng nhập
-    @PostMapping("/login")
-    public String login(
-            @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            HttpSession session,
-            Model model
-    ) {
-        KhachHang kh = service.dangNhap(email, password);
+    // ❌ Remove POST /login — Spring Security handles it
+    // ❌ DO NOT authenticate manually
 
-        if (kh != null) {
-            session.setAttribute("khachHang", kh);
-            return "redirect:/home";
-        } else {
-            model.addAttribute("error", "Sai email hoặc mật khẩu!");
-            return "login";
-        }
-    }
-
-    // ✅ Đăng xuất
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    // ❗ This is kept so you can manually clear custom session values if needed
+    @GetMapping("/logout-success")
+    public String logoutSuccess(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/login?logout";
     }
 }
